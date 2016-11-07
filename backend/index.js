@@ -17,7 +17,7 @@ mongoose.connection.on('error', () => {
   throw new Error(`unable to connect to database: ${config.db}`);
 });
 mongoose.connection.on('connected', () => {
-  console.log(`connection to database: ${config.db} establecied`);
+  console.log(`connection to database: ${config.db} establecied`);  
 });
 mongoose.connection.on('disconnected', () => {
   console.log(`connection to database: ${config.db} lost`);
