@@ -12,5 +12,9 @@ function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
     .state('tarjetas', {
       url: '/tarjetas',
       component: 'tarjetas'
+    })
+    .state('home', {
+      url: '/',
+      component: 'home'
     });
 }
