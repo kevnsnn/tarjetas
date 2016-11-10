@@ -6,6 +6,7 @@ import 'angular-aria';
 import 'angular-animate';
 import 'angular-material/angular-material.css';
 import 'angular-ui-router';
+import 'material-design-icons';
 /* Librerias locales */
 import {tarjetas} from './tarjetas/tarjetas';
 import {home} from './home/home';
