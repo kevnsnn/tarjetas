@@ -53,4 +53,12 @@ function premios() {
   sendEmail(to, subject);
 }
 
-export default { global, premios };
+/* Generar informe de movimientos y envio */
+function movimientos() {
+  let to = 'kevcubero@gmail.com';
+  let subject = '¡Estos han sido tus movimientos de este mes!';
+
+  sendEmail(to, subject);
+}
+
+export default { global, premios, movimientos };
