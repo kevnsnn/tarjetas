@@ -48,7 +48,7 @@ app.use('/api', require('./resources/routes').default);
 let j = schedule.scheduleJob({day: 1}, () => {
   tasks.global();
   tasks.premios();
-  task.movimientos();
+  tasks.movimientos();
 })
 
 /* Endpoint por defecto */
