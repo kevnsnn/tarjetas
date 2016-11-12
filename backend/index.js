@@ -44,9 +44,10 @@ app.use(bodyParser.json());
 /* Montaje recursos de API */
 app.use('/api', require('./resources/routes').default);
 
-/* tareas */
-let j = schedule.scheduleJob({day: 1}, () => {
+/* Tareas */
+let j = schedule.scheduleJob({second: 1}, () => {
   tasks.global();
+  tasks.premios();
 })
 
 /* Endpoint por defecto */
