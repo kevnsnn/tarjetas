@@ -1,13 +1,48 @@
 /* Controlador */
 /* Librerias locales */
-import Compras from './compras.model';
-import Tarjetas from '../tarjetas/tarjetas.model';
-// import Tiendas from '../tiendas/tiendas.model';
+import Compra from './compras.model';
+import Tarjeta from '../tarjetas/tarjetas.model';
+// import Tienda from '../tiendas/tiendas.model';
+
+/* Funcion de calculo de puntos */
+function calculate(importe) {
+let result = 0;
+
+/* Comprobacion de si importe minimo */
+if (importe >= 0.5) {
+  result = Math.ceil(importe/1.5);
+}
+
+return result;
+}
+
+/* Funcion de acumulacion de puntos */
+function accumulate(numTarjeta) {
+  /* Obtencion de compras */
+  Compra.list()
+  .then(compras => {
+      /* Caso de exito */
+      let puntos = 0;
+
+      /* Iteracion de compras para calulo y acumulacion de puntos */
+      for(let i = 0; i < compras.length; i++) {
+        puntos += calculate(compras[i].importe);
+      }
+
+      /* Actualizar puntos */
+      Tarjeta.update(numTarjeta, {puntos: puntos})
+  })
+  .catch(reason => {
+      /* Caso de fallo */
+      console.log('Error listando compras: ', reason)
+    res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
+  });
+}
 
 /* get: Control de consulta de datos compras */
 function list (req, res, next) {
     /* Llamada a consulta del modelo */
-    Compras.list()
+    Compra.list()
     .then(compras => {
         /* Caso de exito */
         res.status(200).json(compras); /* Codigo: 200 + resultado de consulta por cuerpo */
@@ -23,7 +58,7 @@ function list (req, res, next) {
 function create(req, res, next) {
   let isVerified = false;
   /* Construccion objeto tipo schema compras a partir de datos del cuerpo */
-  const compra = new Compras(req.body);
+  const compra = new Compra(req.body);
   
   /* Datos de compra a verificar */
   const idTienda = compra.idTienda;
@@ -41,6 +76,7 @@ function create(req, res, next) {
         res.status(201).json({ msg: 'Compra almacenada' }); /* Codigo: 201 + mensaje de exito */
 
         /* Acumulacion de puntos */
+        accumulate(compra.numTarjeta);
       })
       .catch((reason) => {
         /* Caso de fallo */
@@ -55,7 +91,7 @@ function create(req, res, next) {
 /* put: Control actualizaciones de datos compra */
 function modify(req, res, next) {
   /* Llamada a consulta del modelo */
-  Compras.update(req.params.idTienda, req.params.numTarjeta, req.params.fecha, 
+  Compra.update(req.params.idTienda, req.params.numTarjeta, req.params.fecha, 
     req.params.hora, req.body)
     .then(() => {
       /* Caso de exito */
@@ -71,7 +107,7 @@ function modify(req, res, next) {
 /* delete: Control borrado de datos tarjetas */
 function remove(req, res, next) {
   /* Busqueda de datos a borrar a partir de consulta del modelo */
-  const compra = compra.findCompra(req.params.idTienda, req.params.numTarjeta, req.params.fecha, 
+  const compra = Compra.findCompra(req.params.idTienda, req.params.numTarjeta, req.params.fecha, 
     req.params.hora);
   /* Eliminacion de datos a partir de objeto tipo schema obtenido de la consulta */
   compra.remove()
