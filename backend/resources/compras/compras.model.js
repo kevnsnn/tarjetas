@@ -12,13 +12,9 @@ const CompraSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  fecha: {
+  date: {
     type: Date,
-    required: true
-  },
-  hora: {
-    type: Number,
-    required: true
+    default: Date.now
   },
   importe: {
     type: Number,

@@ -1,6 +1,52 @@
 /* Controlador */
 /* Librerias locales */
 import Compras from './compras.model';
+import Tarjetas from '../tarjetas/tarjetas.model';
+// import Tiendas from '../tiendas/tiendas.model';
+
+/* Funcion que verifica datos de tiendas y tarjetas */
+function verifyData(idTienda, numTarjeta) {
+  let result = false;
+  /* Verificar si id de tienda registrado */
+  // Tiendas.findTienda(idTienda)
+  //   .then(tienda => {
+  //     /* Caso de exito */
+  //     /* Comprobacion de resultado */
+  //     if(tienda) {
+  //       result = true;
+  //     } else {
+  //       result = false;
+  //     }
+  //   })
+  //   .catch(reason => {
+  //     /* Caso de fallo */
+  //     console.log('Error almacenando compra: ', reason)
+  //     res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
+  //     return false;
+  //   });
+
+  /* Verificar si num de tarjeta registrado */
+  Tarjetas.findTarjeta(numTarjeta)
+    .then(tarjeta => {
+      /* Caso de exito */
+      /* Comprobacion de resultado */
+      if(tarjeta) {
+        result = true;
+      } else {
+        result = false;
+      }
+    })
+    .catch(reason => {
+      /* Caso de fallo */
+      console.log('Error almacenando compra: ', reason)
+      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
+      return false;
+    });
+    
+    return result;
+}
+
+/*  */
 
 /* get: Control de consulta de datos compras */
 function list (req, res, next) {
@@ -21,11 +67,22 @@ function list (req, res, next) {
 function create(req, res, next) {
   /* Construccion objeto tipo schema compras a partir de datos del cuerpo */
   const compra = new Compras(req.body);
+  
+  /* Datos de compra a verificar */
+  const idTienda = compra.idTienda;
+  const numTarjeta = compra.numTarjeta;
+
+  /* Verificacion de datos */
+  verifyData(idTienda, numTarjeta);
+
   /* Insercion de datos en DB a partir de objeto tipo schema construido previamente */
   compra.save()
-    .then(() => {
+    .then(compra => {
       /* Caso de exito */
       res.status(201).json({ msg: 'Compra almacenada' }); /* Codigo: 201 + mensaje de exito */
+      
+      /* Acumulacion de puntos */
+      points('sumar' ,compra.importe);
     })
     .catch((reason) => {
       /* Caso de fallo */
