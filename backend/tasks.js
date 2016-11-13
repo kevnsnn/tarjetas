@@ -3,13 +3,16 @@
 import fs from 'fs';
 import nodemailer from 'nodemailer';
 
-/* Asignar mes de informes */
+/* Metodo para asignacion de meses de informes */
 const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
   'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
 ];
 
-let date = new Date();
-let month = monthNames[date.getMonth()];
+function asignarMes() {
+  let date = new Date(); /* Dia actual */
+  let month = monthNames[date.getMonth()]; /* Mes actual */
+  return month;
+}
 
 /* Configuración email */
 /* Credenciales */
@@ -26,10 +29,13 @@ function sendEmail(to, subject) {
     html: '<b>Hello world ?</b>' /* html body */
   };
 
+  /* Envio de email */
   transporter.sendMail(mailOptions, (error, info) => {
     if(error){
+      /* Caso de fallo de envio */
       return console.log(error);
     }
+    /* Caso de exito de envio */
     console.log('Mensaje enviado: ' + info.response);
   });
 }
@@ -37,28 +43,40 @@ function sendEmail(to, subject) {
 /* Tareas */
 /* Generar informe global de tarjetas */
 function global() {
-  let writeStream = fs.createWriteStream(`./reports/IGT_${month}.xls`);
+  let month = asignarMes(); /* Asignacion del mes del informe */
 
+  console.log(`Generando informe global de tarjetas del mes de ${month}`)
+  
+  /* Crear directorio de informes si no existe */
+  if (!fs.existsSync('./reports')){
+    fs.mkdirSync('./reports');
+  }
+
+  let writeStream = fs.createWriteStream(`./reports/IGT_${month}.xls`); /* Crear informe (archivo excel) */
+
+  /* Cadecera de tabla con datos requeridos */
   let header = 'Numero'+'\t'+'Nombre'+'\t'+'Gastos'+'\t'+'Puntos acumulados'+'\t'+'Canjes'+'\t'+'Puntos actuales'+'\n';
 
+  /* Escritura y cierre de informe */
   writeStream.write(header);
   writeStream.close();
 }
 
 /* Generar listado de premios y envio */
 function premios() {
-  let to = 'kevcubero@gmail.com';
-  let subject = '¡Estos son los premios disponibles de este mes!';
+  let to = 'kevcubero@gmail.com'; /* Receptores del email */
+  let subject = '¡Estos son los premios disponibles de este mes!'; /* Asunto del email */
 
-  sendEmail(to, subject);
+  sendEmail(to, subject); /* Envio del email */
 }
 
 /* Generar informe de movimientos y envio */
 function movimientos() {
-  let to = 'kevcubero@gmail.com';
-  let subject = '¡Estos han sido tus movimientos de este mes!';
+  let to = 'kevcubero@gmail.com'; /* Receptores del email */
+  let subject = '¡Estos han sido tus movimientos de este mes!'; /* Asunto del email */
 
-  sendEmail(to, subject);
+  sendEmail(to, subject); /* Envio del email */
 }
 
+/* Exportacion de funciones */
 export default { global, premios, movimientos };

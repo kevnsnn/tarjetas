@@ -33,18 +33,20 @@ mongoose.connection.on('disconnected', () => {
 
 /* Construccion de API */
 const app = express();
+
 /* Sobre protocolo http */
 const httpServer = http.Server(app);
 
 /* Middleware para cruce de dominios */
 app.use(cors());
+
 /* Middleware de configuracion: json como lenguaje de objetos para intercambios de datos */
 app.use(bodyParser.json());
 
 /* Montaje recursos de API */
 app.use('/api', require('./resources/routes').default);
 
-/* Tareas */
+/* Tareas mensuales */
 let j = schedule.scheduleJob({day: 1}, () => {
   tasks.global();
   tasks.premios();

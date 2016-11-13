@@ -5,8 +5,8 @@ gulp.task('clean', () =>
   del(['dist/**'])
 );
 gulp.task('copy', () =>
-  gulp.src(['chat.html'])
-    .pipe(gulp.dest('dist'))
+  gulp.src(['static/**'])
+    .pipe(gulp.dest('dist/static'))
 );
 gulp.task('default', ['clean', 'copy'], () =>
   gulp.src(['**/*.js', '!dist/**', '!node_modules/**', '!gulpfile.js'])
