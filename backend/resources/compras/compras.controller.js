@@ -104,7 +104,7 @@ function create(req, res, next) {
           res.status(201).json({status: 1, msg: 'Compra almacenada pero fallo en acumulacion de puntos' });
         }
       })
-      .catch((reason) => {
+      .catch(reason => {
         /* Caso de fallo */
         console.log('Error almacenando compra: ', reason)
         res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
@@ -144,7 +144,7 @@ function modify(req, res, next) {
         res.status(404).json({ msg: 'Compra a modificar no encontrada' }); /* Codigo: 404 + mensaje de fallo */    
       }
     })
-    .catch((reason) => {
+    .catch(reason => {
       /* Caso de fallo */
       console.log('Error modificando compra: ', reason)
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
@@ -162,7 +162,7 @@ function remove(req, res, next) {
       /* Caso de exito */
       res.status(204).json({ msg: 'Compra eliminada'}); /* Codigo: 204 + mensaje de exito */
     })
-    .catch((reason) => {
+    .catch(reason => {
       /* Caso de fallo */
       console.log('Error eliminando compra: ', reason)
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
