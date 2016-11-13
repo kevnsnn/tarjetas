@@ -38,9 +38,14 @@ function create(req, res, next) {
 function modify(req, res, next) {
   /* Llamada a consulta del modelo */
   Tienda.update(req.params.nombreTienda, req.body)
-    .then(() => {
+    .then((tienda) => {
       /* Caso de exito */
-      res.status(201).json({ msg: 'Tienda modificada' }); /* Codigo: 201 + mensaje de exito */
+      if (tienda) {
+        /* Caso de actualizacion de datos correcta */
+        res.status(201).json({ msg: 'Tienda modificada' }); /* Codigo: 201 + mensaje de exito */  
+      } else {
+        res.status(404).json({ msg: 'Tienda a modificar no encontrada' }); /* Codigo: 404 + mensaje de fallo */
+      }
     })
     .catch((reason) => {
       /* Caso de fallo */

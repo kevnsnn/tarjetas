@@ -123,7 +123,7 @@ function modify(req, res, next) {
     .then(compra => {
       /* Caso de exito */
       if (compra) {
-        /* Caso Actualizacion de datos correcta */
+        /* Caso actualizacion de datos correcta */
         /* Si la modificacion provoca cambio de puntos de otra tarjeta -> actualizar esa otra tarjeta */
         if (compra.numTarjeta !== req.params.numTarjeta) {
           isAccumulated = accumulate(req.params.numTarjeta);
