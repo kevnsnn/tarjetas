@@ -42,9 +42,14 @@ function create(req, res, next) {
 function modify(req, res, next) {
   /* Llamada a consulta del modelo */
   Tarjeta.update(req.params.numTarjeta, req.body)
-    .then(() => {
+    .then((tarjeta) => {
       /* Caso de exito */
-      res.status(201).json({ msg: 'Tarjeta modificada' }); /* Codigo: 201 + mensaje de exito */
+      if (tarjeta) {
+        /* Actualizacion correcta */
+        res.status(201).json({ msg: 'Tarjeta modificada' }); /* Codigo: 201 + mensaje de exito */
+      } else {
+        res.status(404).json({ msg: 'Tarjeta a modificar no encontrada'}) /* Codigo: 404 + mensaje de fallo */
+      }    
     })
     .catch((reason) => {
       /* Caso de fallo */

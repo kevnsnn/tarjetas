@@ -141,7 +141,7 @@ function modify(req, res, next) {
         }
       } else {
         /* Caso de actualizacion fallida por compra no encontrada */
-        res.status(401).json({ msg: 'Datos de compra erroneos' }); /* Codigo: 401 + mensaje de fallo */    
+        res.status(404).json({ msg: 'Compra a modificar no encontrada' }); /* Codigo: 404 + mensaje de fallo */    
       }
     })
     .catch((reason) => {
