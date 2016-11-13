@@ -21,8 +21,10 @@ function list (req, res, next) {
 function create(req, res, next) {
   /* Construccion objeto tipo schema tarjetas a partir de datos del cuerpo */
   const tarjeta = new Tarjeta(req.body);
+
   /* Generacion numero aleatorio para num tarjetas entre 999999999 y 100000 */
   tarjeta.numTarjeta = Math.floor(Math.random() * (999999999 - 100000 + 1)) + 100000;
+
   /* Insercion de datos en DB a partir de objeto tipo schema construido previamente */
   tarjeta.save()
     .then(() => {
@@ -55,6 +57,7 @@ function modify(req, res, next) {
 function remove(req, res, next) {
   /* Busqueda de datos a borrar a partir de consulta del modelo */
   const tarjeta = Tarjeta.findTarjeta(req.params.numTarjeta);
+
   /* Eliminacion de datos a partir de objeto tipo schema obtenido de la consulta */
   tarjeta.remove()
     .then(() => {
@@ -68,5 +71,30 @@ function remove(req, res, next) {
     });
 }
 
+/* Funcion que verifica datos de tiendas y tarjetas */
+function verify(numTarjeta) {
+  let result = false;
+  
+  /* Verificar si num de tarjeta registrado */
+  Tarjetas.findTarjeta(numTarjeta)
+    .then(tarjeta => {
+      /* Caso de exito */
+      /* Comprobacion de resultado */
+      if(tarjeta) {
+        result = true;
+      } else {
+        result = false;
+      }
+    })
+    .catch(reason => {
+      /* Caso de fallo */
+      console.log('Error verificando tarjeta: ', reason)
+      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
+      return false;
+    });
+    
+    return result;
+}
+
 /* Exportacion de funciones controladoras */
-export default { list, create, modify, remove }
+export default { list, create, modify, remove, verify }
