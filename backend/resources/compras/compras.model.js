@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 /* Construccion schema de compras */
 const CompraSchema = new mongoose.Schema({
-  idTienda: {
+  nombreTienda: {
     type: Number,
     required: true
   },
@@ -35,11 +35,11 @@ CompraSchema.statics = {
   },
   /* put: Busca los datos de una compra y actualiza los datos de modificaciones */
   update(idTienda, numTarjeta, modificaciones) {
-    return this.findOneAndUpdate({idTienda: idTienda, numTarjeta: numTarjeta}, modificaciones, {multi: true});
+    return this.findOneAndUpdate({nombreTienda: nombreTienda, numTarjeta: numTarjeta}, modificaciones, {multi: true});
   },
   /* Busca los datos de una compra */
-  findCompra(idTienda, numTarjeta) {
-    return this.findOne({ idTienda: idTienda, numTarjeta: numTarjeta});
+  findCompra(nombreTienda, numTarjeta) {
+    return this.findOne({ nombreTienda: nombreTienda, numTarjeta: numTarjeta});
   }
 };
 
