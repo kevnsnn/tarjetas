@@ -33,20 +33,13 @@ CompraSchema.statics = {
   list() {
     return this.find({});
   },
-  /* put: Busca los datos de una Compra y actualiza el importe */
-  update(idTienda, numTarjeta, fecha, hora, modificaciones) {
-    return this.findOneAndUpdate({idTienda: idTienda, 
-                                  numTarjeta: numTarjeta, 
-                                  fecha: fecha, 
-                                  hora: hora},
-       modificaciones, {multi: true});
+  /* put: Busca los datos de una compra y actualiza los datos de modificaciones */
+  update(idTienda, numTarjeta, modificaciones) {
+    return this.findOneAndUpdate({idTienda: idTienda, numTarjeta: numTarjeta}, modificaciones, {multi: true});
   },
-  /* Busca los datos de numTarjeta */
-  findCompra(idTienda, numTarjeta, fecha, hora) {
-    return this.findOne({ idTienda: idTienda, 
-                          numTarjeta: numTarjeta, 
-                          fecha: fecha, 
-                          hora: hora });
+  /* Busca los datos de una compra */
+  findCompra(idTienda, numTarjeta) {
+    return this.findOne({ idTienda: idTienda, numTarjeta: numTarjeta});
   }
 };
 

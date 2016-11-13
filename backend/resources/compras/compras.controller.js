@@ -70,7 +70,7 @@ function list (req, res, next) {
 function create(req, res, next) {
   let isVerified = false;
   let isAccumulated = false;
-  
+
   /* Construccion objeto tipo schema compras a partir de datos del cuerpo */
   const compra = new Compra(req.body);
   
@@ -104,31 +104,59 @@ function create(req, res, next) {
         res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
       });
   } else {
-      res.status(401).json({ msg: 'Credenciales erroneas' }); /* Codigo: 401 + mensaje de fallo */
+    res.status(401).json({ msg: 'Credenciales erroneas' }); /* Codigo: 401 + mensaje de fallo */
   }
 }
 
 /* put: Control actualizaciones de datos compra */
 function modify(req, res, next) {
-  /* Llamada a consulta del modelo */
-  Compra.update(req.params.idTienda, req.params.numTarjeta, req.params.fecha, 
-    req.params.hora, req.body)
-    .then(() => {
-      /* Caso de exito */
-      res.status(201).json({ msg: 'Compra modificada' }); /* Codigo: 201 + mensaje de exito */
-    })
-    .catch((reason) => {
-      /* Caso de fallo */
-      console.log('Error modificando compra: ', reason)
-      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
-    });
-}
+  let isVerified = false;
+  let isAccumulated = false;
+
+  /* Datos de compra a verificar */
+  const idTienda = req.params.idTienda;
+  const numTarjeta = req.params.numTarjeta;
+
+  /* Verificacion de datos */
+  // isVerified = Tienda.verify(idTienda);
+  isVerified = Tarjeta.verify(numTarjeta);
+
+  if(isVerified) {
+    /* Llamada a consulta del modelo */
+    Compra.update(req.params.idTienda, req.params.numTarjeta, req.body)
+      .then(compra => {
+        /* Caso de exito */
+        /* Caso la modificacion provoca cambio de puntos de otra tarjeta */
+        if (compra.numTarjeta !== req.params.numTarjeta) {
+          isAccumulated = accumulate(req.params.numTarjeta);
+        }
+
+        /* Actualizacion de los puntos de la tarjeta que figura en la compra modificada */
+        isAccumulated = accumulate(compra.numTarjeta);
+
+        if(isAcumulated) {
+          /* Status: Modificacion de compra y puntos correcto + codigo: 201 + mensaje de exito */
+          res.status(201).json({status: 0, msg: 'Compra y puntos modificados' });
+        } else {
+          /* Status: Modificacion de compra correcta y modificacion de puntos fallida + codigo: 201 + mensaje de exito */
+          res.status(201).json({status: 1, msg: 'Compra modificada y puntos no modificados correctamente' });
+        }
+      })
+      .catch((reason) => {
+        /* Caso de fallo */
+        console.log('Error modificando compra: ', reason)
+        res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
+      });
+  } else {
+    res.status(401).json({ msg: 'Credenciales erroneas' }); /* Codigo: 401 + mensaje de fallo */    
+  }
+} 
 
 /* delete: Control borrado de datos tarjetas */
 function remove(req, res, next) {
   /* Busqueda de datos a borrar a partir de consulta del modelo */
-  const compra = Compra.findCompra(req.params.idTienda, req.params.numTarjeta, req.params.fecha, 
-    req.params.hora);
+  const compra = Compra.findCompra(req.params.idTienda, req.params.numTarjeta);
+
   /* Eliminacion de datos a partir de objeto tipo schema obtenido de la consulta */
   compra.remove()
     .then(() => {

@@ -47,7 +47,7 @@ app.use(bodyParser.json());
 app.use('/api', require('./resources/routes').default);
 
 /* Tareas mensuales */
-let j = schedule.scheduleJob({day: 1}, () => {
+let j = schedule.scheduleJob('* 0 9 1 * *', () => {
   tasks.global();
   tasks.premios();
   tasks.movimientos();
