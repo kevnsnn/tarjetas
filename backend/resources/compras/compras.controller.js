@@ -123,7 +123,8 @@ function modify(req, res, next) {
     .then(compra => {
       /* Caso de exito */
       if (compra) {
-        /* Caso la modificacion provoca cambio de puntos de otra tarjeta */
+        /* Caso Actualizacion de datos correcta */
+        /* Si la modificacion provoca cambio de puntos de otra tarjeta -> actualizar esa otra tarjeta */
         if (compra.numTarjeta !== req.params.numTarjeta) {
           isAccumulated = accumulate(req.params.numTarjeta);
         }
@@ -139,6 +140,7 @@ function modify(req, res, next) {
           res.status(201).json({status: 1, msg: 'Compra modificada y puntos no modificados correctamente' });
         }
       } else {
+        /* Caso de actualizacion fallida por compra no encontrada */
         res.status(401).json({ msg: 'Datos de compra erroneos' }); /* Codigo: 401 + mensaje de fallo */    
       }
     })
