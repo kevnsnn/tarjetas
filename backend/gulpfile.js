@@ -8,7 +8,7 @@ gulp.task('copy', () =>
   gulp.src(['static/**'])
     .pipe(gulp.dest('dist/static'))
 );
-gulp.task('default', ['copy'], () =>
+gulp.task('default', ['clean'], () =>
   gulp.src(['**/*.js', '!dist/**', '!node_modules/**', '!gulpfile.js'])
     .pipe(babel({
       presets: ['es2015']

@@ -71,24 +71,5 @@ function remove(req, res, next) {
     });
 }
 
-/* Funcion que verifica datos de tiendas y tarjetas */
-function verify(nombreTienda) {
-  let result = false;
-  
-  /* Verificar si num de tarjeta registrado */
-  Tienda.findTienda(nombreTienda)
-    .then(tienda => {
-      /* Caso de exito */
-      /* Comprobacion de resultado */
-      if(tienda) { result = true; }
-    })
-    .catch(reason => {
-      /* Caso de fallo */
-      console.log('Error verificando tienda: ', reason)
-    });
-    
-    return result;
-}
-
 /* Exportacion de funciones controladoras */
-export default { list, create, modify, remove, verify }
+export default { list, create, modify, remove }

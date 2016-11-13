@@ -4,6 +4,44 @@ import Compra from './compras.model';
 import Tarjeta from '../tarjetas/tarjetas.model';
 import Tienda from '../tiendas/tiendas.model';
 
+/* Funcion que verifica datos de tiendas */
+function verifyTienda(nombreTienda) {
+  let result = false;
+  
+  /* Verificar si num de tarjeta registrado */
+  Tienda.findTienda(nombreTienda)
+    .then(tienda => {
+      /* Caso de exito */
+      /* Comprobacion de resultado */
+      if(tienda) { result = true; }
+    })
+    .catch(reason => {
+      /* Caso de fallo */
+      console.log('Error verificando tienda: ', reason)
+    });
+    
+    return result;
+}
+
+/* Funcion que verifica datos de tarjetas */
+function verifyTarjeta(numTarjeta) {
+  let result = false;
+  
+  /* Verificar si num de tarjeta registrado */
+  Tarjeta.findTarjeta(numTarjeta)
+    .then(tarjeta => {
+      /* Caso de exito */
+      /* Comprobacion de resultado */
+      if(tarjeta) { result = true; }
+    })
+    .catch(reason => {
+      /* Caso de fallo */
+      console.log('Error verificando tarjeta: ', reason)
+    });
+    
+    return result;
+}
+
 /* Funcion de calculo de puntos */
 function calculate(importe) {
 let result = 0;
@@ -81,12 +119,12 @@ function create(req, res, next) {
   const compra = new Compra(req.body);
   
   /* Datos de compra a verificar */
-  const nombreTienda = compra.nombreTienda;
   const numTarjeta = compra.numTarjeta;
+  const nombreTienda = compra.nombreTienda;
 
   /* Verificacion de datos */
-  isVerified = Tienda.verify(nombreTienda);
-  isVerified = Tarjeta.verify(numTarjeta);
+  isVerified = verifyTienda(nombreTienda);
+  isVerified = verifyTarjeta(numTarjeta);
 
   if(isVerified) {
     /* Insercion de datos en DB a partir de objeto tipo schema construido previamente */
