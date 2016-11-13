@@ -18,6 +18,8 @@ return result;
 
 /* Funcion de acumulacion de puntos */
 function accumulate(numTarjeta) {
+  let result = false;
+
   /* Obtencion de compras */
   Compra.list()
   .then(compras => {
@@ -31,12 +33,22 @@ function accumulate(numTarjeta) {
 
       /* Actualizar puntos */
       Tarjeta.update(numTarjeta, {puntos: puntos})
-  })
-  .catch(reason => {
+        .then(() => {
+          /* Caso de exito */
+          console.log('Puntos acumulados');
+          result = true;
+        })
+        .catch((reason) => {
+          /* Caso de fallo */
+          console.log('Error acumulando puntos: ', reason)
+        });
+    })
+    .catch(reason => {
       /* Caso de fallo */
       console.log('Error listando compras: ', reason)
-    res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
-  });
+    });
+
+    return result;
 }
 
 /* get: Control de consulta de datos compras */
@@ -57,6 +69,8 @@ function list (req, res, next) {
 /* post: Control registro de datos compra */
 function create(req, res, next) {
   let isVerified = false;
+  let isAccumulated = false;
+  
   /* Construccion objeto tipo schema compras a partir de datos del cuerpo */
   const compra = new Compra(req.body);
   
@@ -73,18 +87,24 @@ function create(req, res, next) {
     compra.save()
       .then(compra => {
         /* Caso de exito */
-        res.status(201).json({ msg: 'Compra almacenada' }); /* Codigo: 201 + mensaje de exito */
-
         /* Acumulacion de puntos */
-        accumulate(compra.numTarjeta);
+        isAccumulated = accumulate(compra.numTarjeta);
+
+        if(isAcumulated) {
+          /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
+          res.status(201).json({status: 0, msg: 'Compra almacenada y puntos acumulados' });
+        } else {
+          /* Status: Compra correcta y acumulacion de puntos fallida + codigo: 201 + mensaje de exito */
+          res.status(201).json({status: 1, msg: 'Compra almacenada pero fallo en acumulacion de puntos' });
+        }
       })
       .catch((reason) => {
         /* Caso de fallo */
         console.log('Error almacenando compra: ', reason)
-        res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
+        res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
       });
   } else {
-      res.status(401).json({ msg: 'Credenciales erroneas' }); /* Codigo: 401 + mensaje de fallo*/
+      res.status(401).json({ msg: 'Credenciales erroneas' }); /* Codigo: 401 + mensaje de fallo */
   }
 }
 

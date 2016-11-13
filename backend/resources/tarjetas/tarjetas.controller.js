@@ -80,17 +80,11 @@ function verify(numTarjeta) {
     .then(tarjeta => {
       /* Caso de exito */
       /* Comprobacion de resultado */
-      if(tarjeta) {
-        result = true;
-      } else {
-        result = false;
-      }
+      if(tarjeta) { result = true; }
     })
     .catch(reason => {
       /* Caso de fallo */
       console.log('Error verificando tarjeta: ', reason)
-      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
-      return false;
     });
     
     return result;
