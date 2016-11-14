@@ -14,12 +14,24 @@ function routesConfig($mdThemingProvider, $stateProvider, $urlRouterProvider, $l
 
   /* Ruta componente tarjetas */
   $stateProvider
-    .state('tarjetas', {
-      url: '/tarjetas',
-      component: 'tarjetas'
-    })
     .state('home', {
       url: '/',
       component: 'home'
+    })
+    .state('accesos', {
+      url: '/accesos',
+      component: 'accesos'
+    })
+    .state('socios', {
+      url: '/socios',
+      component: 'socios'
+    })
+    .state('tiendas', {
+      url: '/tiendas',
+      component: 'tiendas'
+    })
+    .state('empresa', {
+      url: '/empresa',
+      component: 'empresa'
     });
 }
