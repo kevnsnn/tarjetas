@@ -52,16 +52,16 @@ function list (req, res, next) {
 /* delete: borrado */
 function remove(req, res, next) {
   /* Busqueda de datos a borrar a partir de consulta del modelo */
-  const tarjeta = Tarjeta.findTarjeta(req.params.numTarjeta);
+  const premio = Premio.findPremio(req.params.idPremio)
   /* Eliminacion de datos a partir de objeto tipo schema obtenido de la consulta */
-  tarjeta.remove()
+  premio.remove()
     .then(() => {
       /* Caso de exito */
-      res.status(204).json({ msg: 'Tarjeta eliminada'}); /* Codigo: 204 + mensaje de exito */
+      res.status(204).json({ msg: 'Premio eliminado'}); /* Codigo: 204 + mensaje de exito */
     })
     .catch((reason) => {
       /* Caso de fallo */
-      console.log('Error modificando tarjeta: ', reason)
+      console.log('Error borrando premio: ', reason)
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 }
