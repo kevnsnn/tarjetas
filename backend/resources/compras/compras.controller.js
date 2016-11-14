@@ -6,93 +6,84 @@ import Tienda from '../tiendas/tiendas.model';
 
 /* Funcion que verifica datos de tiendas */
 function verifyTienda(nombreTienda) {
-  let result = false;
-  
   /* Verificar si num de tarjeta registrado */
-  Tienda.findTienda(nombreTienda)
+  return Tienda.findTienda(nombreTienda)
     .then(tienda => {
       /* Caso de exito */
       /* Comprobacion de resultado */
-      if(tienda) { result = true; }
+      if (tienda) {
+        return true;
+      } else {
+        return false
+      }
     })
     .catch(reason => {
       /* Caso de fallo */
-      console.log('Error verificando tienda: ', reason)
+      console.log('Error verificando tienda: ', reason);
+      return false;
     });
-    
-    return result;
 }
 
 /* Funcion que verifica datos de tarjetas */
 function verifyTarjeta(numTarjeta) {
-  let result = false;
-  
+  let result = false
   /* Verificar si num de tarjeta registrado */
-  Tarjeta.findTarjeta(numTarjeta)
+  return Tarjeta.findTarjeta(numTarjeta)
     .then(tarjeta => {
       /* Caso de exito */
       /* Comprobacion de resultado */
-      if(tarjeta) { result = true; }
+      if (tarjeta) {
+        return true;
+      } else {
+        return false;
+      }
     })
     .catch(reason => {
       /* Caso de fallo */
-      console.log('Error verificando tarjeta: ', reason)
+      console.log('Error verificando tarjeta: ', reason);
+      return false;
     });
-    
-    return result;
-}
-
-/* Funcion de calculo de puntos */
-function calculate(importe) {
-let result = 0;
-
-/* Comprobacion de si importe minimo */
-if (importe >= 0.5) {
-  result = Math.ceil(importe/1.5);
-}
-
-return result;
 }
 
 /* Funcion de acumulacion de puntos */
 function accumulate(numTarjeta) {
-  let result = false;
-
   /* Obtencion de compras */
-  Compra.list()
+  return Compra.listByNumTarjeta(numTarjeta)
   .then(compras => {
       /* Caso de exito */
       let puntos = 0;
 
       /* Iteracion de compras para calulo y acumulacion de puntos */
       for(let i = 0; i < compras.length; i++) {
-        puntos += calculate(compras[i].importe);
+        /* Comprobacion de si importe minimo */
+        if (compras[i].importe >= 0.5) {
+          puntos += Math.ceil(compras[i].importe/1.5);
+        }
       }
 
       /* Actualizar puntos */
-      Tarjeta.update(numTarjeta, {puntos: puntos})
+      return Tarjeta.update(numTarjeta, {puntos: puntos})
         .then(tarjeta => {
           /* Caso de exito */
           if (tarjeta) {
             /* Actualizacion correcta */
-            console.log('Puntos acumulados');
-            result = true;
+            return true;
           } else {
             /* Actualizacion incorrecta */
-            console.log('Tarjeta para acumulacion de puntos no encontrada');
+            return false;            
           }
         })
         .catch((reason) => {
           /* Caso de fallo */
-          console.log('Error acumulando puntos: ', reason)
+          console.log('Error acumulando puntos: ', reason);
+          return false;          
         });
     })
     .catch(reason => {
       /* Caso de fallo */
-      console.log('Error listando compras: ', reason)
+      console.log('Error listando compras: ', reason);
+      return false;      
     });
-
-    return result;
 }
 
 /* get: Control de consulta de datos compras */
@@ -105,16 +96,13 @@ function list (req, res, next) {
     })
     .catch(reason => {
         /* Caso de fallo */
-        console.log('Error listando compras: ', reason)
+        console.log('Error listando compras: ', reason);
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
     });
 }
 
 /* post: Control registro de datos compra */
 function create(req, res, next) {
-  let isVerified = false;
-  let isAccumulated = false;
-
   /* Construccion objeto tipo schema compras a partir de datos del cuerpo */
   const compra = new Compra(req.body);
   
@@ -122,69 +110,85 @@ function create(req, res, next) {
   const numTarjeta = compra.numTarjeta;
   const nombreTienda = compra.nombreTienda;
 
-  /* Verificacion de datos */
-  isVerified = verifyTienda(nombreTienda);
-  isVerified = verifyTarjeta(numTarjeta);
-
-  if(isVerified) {
-    /* Insercion de datos en DB a partir de objeto tipo schema construido previamente */
-    compra.save()
-      .then(compra => {
-        /* Caso de exito */
-        /* Acumulacion de puntos */
-        isAccumulated = accumulate(compra.numTarjeta);
-
-        if(isAcumulated) {
-          /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
-          res.status(201).json({status: 0, msg: 'Compra almacenada y puntos acumulados' });
+  /* Verificacion de datos */ 
+  verifyTienda(nombreTienda).then(verifiedTienda => {
+    if (verifiedTienda) {
+      verifyTarjeta(numTarjeta).then(verifiedTarjeta => {
+        if (verifiedTarjeta) {
+          /* Insercion de datos en DB a partir de objeto tipo schema construido previamente */
+          compra.save()
+            .then(compra => {
+              /* Caso de exito */
+              /* Acumulacion de puntos */
+              accumulate(compra.numTarjeta).then(isAccumulated => {
+                if (isAccumulated) {
+                  /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
+                  res.status(201).json({status: 0, msg: 'Compra almacenada y puntos acumulados' });
+                } else {
+                  /* Status: Compra correcta y acumulacion de puntos fallida + codigo: 201 + mensaje de exito */
+                  res.status(201).json({status: 1, msg: 'Compra almacenada pero fallo en acumulacion de puntos' });
+                }
+              });
+            })
+            .catch(reason => {
+              /* Caso de fallo */
+              console.log('Error almacenando compra: ', reason);
+              res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
+            });
         } else {
-          /* Status: Compra correcta y acumulacion de puntos fallida + codigo: 201 + mensaje de exito */
-          res.status(201).json({status: 1, msg: 'Compra almacenada pero fallo en acumulacion de puntos' });
+          res.status(401).json({ msg: 'Credenciales erroneas' }); /* Codigo: 401 + mensaje de fallo */
         }
-      })
-      .catch(reason => {
-        /* Caso de fallo */
-        console.log('Error almacenando compra: ', reason)
-        res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
       });
-  } else {
-    res.status(401).json({ msg: 'Credenciales erroneas' }); /* Codigo: 401 + mensaje de fallo */
-  }
+    } else {
+      res.status(401).json({ msg: 'Credenciales erroneas' }); /* Codigo: 401 + mensaje de fallo */      
+    }
+  })
+  .catch(reason => {
+    /* Caso de fallo */
+    console.log('Error verificando credenciales de compra: ', reason);
+    res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
+  });
 }
 
 /* put: Control actualizaciones de datos compra */
 function modify(req, res, next) {
-  let isAccumulated = false;
-
   /* Llamada a consulta del modelo */
-  Compra.update(req.params.nombreTienda, req.params.numTarjeta, req.body)
-    .then(compra => {
+  Compra.update(req.params.fecha, req.body)
+    .then(oldCompra => {
       /* Caso de exito */
-      if (compra) {
+      if (oldCompra) {
         /* Caso actualizacion de datos correcta */
-        /* Si la modificacion provoca cambio de puntos de otra tarjeta -> actualizar esa otra tarjeta */
-        if (compra.numTarjeta !== req.params.numTarjeta) {
-          isAccumulated = accumulate(req.params.numTarjeta);
-        }
-        
         /* Actualizacion de los puntos de la tarjeta que figura en la compra modificada */
-        isAccumulated = accumulate(compra.numTarjeta);
-        
-        if(isAcumulated) {
-          /* Status: Modificacion de compra y puntos correcto + codigo: 201 + mensaje de exito */
-          res.status(201).json({status: 0, msg: 'Compra y puntos modificados' });
-        } else {
-          /* Status: Modificacion de compra correcta y modificacion de puntos fallida + codigo: 201 + mensaje de exito */
-          res.status(201).json({status: 1, msg: 'Compra modificada y puntos no modificados correctamente' });
-        }
+        accumulate(oldCompra.numTarjeta).then(isAccumulated => {
+          if (isAccumulated) {
+            if (req.body.numTarjeta && req.body.numTarjeta !== oldCompra.numTarjeta) {
+              /* Si la modificacion provoca cambio de puntos de otra tarjeta -> actualizar esa otra tarjeta */                  
+              accumulate(req.body.numTarjeta).then(isOtherAccumulated => {
+                if (isOtherAccumulated) {
+                   /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
+                  res.status(201).json({ status: 0, msg: 'Compra y puntos modificados' });
+                } else {
+                /* Status: Compra correcta y acumulacion de puntos fallida + codigo: 201 + mensaje */
+                res.status(201).json({ status: 1, msg: 'Compra modificada pero puntos de antigua tarjeta no modificada' });
+                }   
+              });
+            } else {
+              /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
+              res.status(201).json({ status: 0, msg: 'Compra y puntos modificados' });
+            }
+          } else {
+            /* Status: Compra correcta, fallo en puntos + codigo: 201 + mensaje */                
+            res.status(201).json({ status: 0, msg: 'Compra modificada pero puntos no modificados' });            
+          }
+        });   
       } else {
         /* Caso de actualizacion fallida por compra no encontrada */
-        res.status(404).json({ msg: 'Compra a modificar no encontrada' }); /* Codigo: 404 + mensaje de fallo */    
+        res.status(404).json({ msg: 'Compra a modificar no encontrada' }); /* Codigo: 404 + mensaje de fallo */ 
       }
     })
     .catch(reason => {
       /* Caso de fallo */
-      console.log('Error modificando compra: ', reason)
+      console.log('Error modificando compra: ', reason);
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 } 
@@ -192,7 +196,7 @@ function modify(req, res, next) {
 /* delete: Control borrado de datos tarjetas */
 function remove(req, res, next) {
   /* Busqueda de datos a borrar a partir de consulta del modelo */
-  const compra = Compra.findCompra(req.params.nombreTienda, req.params.numTarjeta);
+  const compra = Compra.findCompra(req.params.fecha);
 
   /* Eliminacion de datos a partir de objeto tipo schema obtenido de la consulta */
   compra.remove()
@@ -202,7 +206,7 @@ function remove(req, res, next) {
     })
     .catch(reason => {
       /* Caso de fallo */
-      console.log('Error eliminando compra: ', reason)
+      console.log('Error eliminando compra: ', reason);
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 }

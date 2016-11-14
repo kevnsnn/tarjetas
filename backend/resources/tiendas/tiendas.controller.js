@@ -12,7 +12,7 @@ function list (req, res, next) {
     })
     .catch(reason => {
         /* Caso de fallo */
-        console.log('Error listando tiendas: ', reason)
+        console.log('Error listando tiendas: ', reason);
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
     });
 }
@@ -29,7 +29,7 @@ function create(req, res, next) {
     })
     .catch((reason) => {
       /* Caso de fallo */
-      console.log('Error almacenando tienda: ', reason)
+      console.log('Error almacenando tienda: ', reason);
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
     });
 }
@@ -49,7 +49,7 @@ function modify(req, res, next) {
     })
     .catch((reason) => {
       /* Caso de fallo */
-      console.log('Error modificando tienda: ', reason)
+      console.log('Error modificando tienda: ', reason);
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 }
@@ -66,7 +66,7 @@ function remove(req, res, next) {
     })
     .catch(reason => {
       /* Caso de fallo */
-      console.log('Error modificando tienda: ', reason)
+      console.log('Error modificando tienda: ', reason);
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 }
