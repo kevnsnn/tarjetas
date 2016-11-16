@@ -6,7 +6,7 @@ export default routesConfig;
 function routesConfig($mdThemingProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('blue')
-    .accentPalette('teal')
+    .accentPalette('orange')
     .warnPalette('red')
     .backgroundPalette('grey');
   $locationProvider.html5Mode(true).hashPrefix('!');
