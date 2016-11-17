@@ -7,6 +7,8 @@ import 'angular-animate';
 import 'angular-material/angular-material.css';
 import 'angular-ui-router';
 import 'material-design-icons';
+import 'angular-material-data-table';
+import 'angular-messages';
 /* Librerias locales */
 import {home} from './home/home';
 import {accesos} from './accesos/accesos';
@@ -22,7 +24,7 @@ export const app = 'app';
 
 /* Configuracion angular */
 angular
-  .module(app, ['ui.router', 'ngMaterial']) /* Declaracion de modulos inyectados */
+  .module(app, ['ui.router', 'ngMaterial', 'md.data.table', 'ngMessages']) /* Declaracion de modulos inyectados */
   .config(routesConfig) /* Enrutamiento */
   .component('home', home) /* Componente angular del recurso home */
   .component('accesos', accesos) /* Componente angular del recurso accesos */

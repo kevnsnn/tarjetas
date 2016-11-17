@@ -1,98 +1,64 @@
 <!-- Accesos -->
 <div class="homeContent" layout="column" layout-fill layout-align="start center">
   <md-toolbar md-scroll-shrink>
-    <div class="md-toolbar-tools" layout="row" layout-align="space-around center">
+    <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
       <div>
         <img ng-src="{{ $ctrl.icon }}" class="icon"/>
         <span class="md-headline">Ingeniería del Software II</span>
       </div>
-      <span class="md-subhead accessInfo">¡Accedo a socios y tiendas!</span>
-      <form name="userForm" class="topForm" ng-submit="$ctrl.loginUser()" layout="row">
-        <!-- Username -->
-        <md-input-container required md-no-float>
-          <md-icon class="material-icons md-light">person</md-icon>
-          <input required ng-maxlength="30" type="text" placeholder="Usuario" ng-model="$ctrl.usuario" name="usuario" id="phWhite">
-          <!-- Username error messages -->
-          <div ng-messages="userForm.username.$error">
-            <div ng-message="required">Required username.</div>
-            <div ng-message="maxlength">Max length of 30 characters</div>
-          </div>
-        </md-input-container>
-        <!-- Password -->
-        <md-input-container md-no-float class="md-block">
-          <md-icon class="material-icons md-light">lock</md-icon>
-          <input required ng-maxlength="30" type="password" placeholder="Contraseña" ng-model="$ctrl.password" name="password" id="phWhite">
-          <!-- Username error messages -->
-          <div ng-messages="userForm.password.$error">
-            <div ng-message="required">Required password.</div>
-            <div ng-message="maxlength">Max length of 30 characters</div>
-          </div>
-        </md-input-container>
-      </form>
-      <!-- Button form -->
-      <md-button type="submit" class="md-raised md-warn botonLogin">login</md-button>
+      <span class="md-subhead accessInfo">Tienda {{ $ctrl.nombreTienda }}</span>      
+      <span class="md-subhead accessInfo">¡Gestiona tus compras!</span>
     </div>
   </md-toolbar>
   <div layout="row" layout-align="center center">
-    <md-button class="md-raised" md-colors="{background: 'green'}" ng-click="$ctrl.registrar(0)">Registro de socios</md-button>
-    <md-button class="md-raised" md-colors="{background: 'teal'}" ng-click="$ctrl.registrar(1)">Registro de tiendas</md-button>      
+    <md-button class="md-raised" md-colors="{background: 'green'}" ng-click="$ctrl.registrar(0)">Registro de compras</md-button>
+    <md-button class="md-raised" md-colors="{background: 'teal'}" ng-click="$ctrl.registrar(1)">Historial de compras</md-button>      
   </div>
-  <div layout="column" class="box formTarjeta" ng-show="$ctrl.isRegistro && $ctrl.isSocio" layout-align="center">
-      <h2>Registro de Socios</h2>
+  <div layout="column" class="box formTarjeta" ng-show="$ctrl.isAction && $ctrl.isRegistro" layout-align="center">
+      <h2>Registro de compras</h2>
       <!-- Formulario tarjetas -->
-    <form ng-submit="$ctrl.registrarTarjeta()">
-      <div layout="row">        
-      <!-- Input nombre -->
+    <form ng-submit="$ctrl.registrarCompra()">
+      <!-- Input nombreTienda -->
       <md-input-container md-no-float class="md-block">
-        <input ng-model="$ctrl.nombre" type="text" placeholder="Nombre" id="phWhite">
+        <md-icon class="material-icons md-light">credit_card</md-icon>
+        <input ng-model="$ctrl.numTarjeta" type="text" placeholder="Número de tarjeta de socio" id="phWhite">
       </md-input-container>
-        <!-- Input primerApellido -->
-        <md-input-container md-no-float class="md-block">
-          <input ng-model="$ctrl.primerApellido" type="text" placeholder="Primer apellido" id="phWhite">
-        </md-input-container>
-        <!-- Input segundoApellido -->
-        <md-input-container md-no-float class="md-block">
-          <input ng-model="$ctrl.segundoApellido" type="text" placeholder="Segundo apellido" id="phWhite">
-        </md-input-container>
-        </div>
-      <div layout="row">                
-      <!-- Input direccion -->
+      <!-- Input importe -->
       <md-input-container md-no-float class="md-block">
-        <input ng-model="$ctrl.direccion" type="text" placeholder="Dirección" id="phWhite">
+        <md-icon class="material-icons md-light">attach_money</md-icon>        
+        <input ng-model="$ctrl.importe" type="text" placeholder="Importe de compra" id="phWhite">
       </md-input-container>
-      <!-- Input telefono -->
-      <md-input-container md-no-float class="md-block">
-        <input ng-model="$ctrl.telefono" type="text" placeholder="Teléfono" id="phWhite">
-      </md-input-container>
-      <!-- Input email -->
-      <md-input-container md-no-float class="md-block">
-        <input ng-model="$ctrl.email" type="email" placeholder="Email" id="phWhite">
-      </md-input-container>
-      </div>        
       <!-- Boton submit del formulario -->
       <md-button type="submit" class="md-raised md-warn">Registrar</md-button>
     </form>
   </div>
-  <div layout="column" class="box formTarjeta" ng-show="$ctrl.isRegistro && $ctrl.isTienda" layout-align="center">
-      <h2>Registro de Tiendas</h2>
-      <!-- Formulario tarjetas -->
-    <form ng-submit="$ctrl.registrarTienda()">
-      <div layout="row">
-      <!-- Input nombre -->
-      <md-input-container md-no-float class="md-block">
-        <input ng-model="$ctrl.nombreTienda" type="text" placeholder="Nombre de la tienda" id="phWhite">
-      </md-input-container>
-        <!-- Input primerApellido -->
-        <md-input-container md-no-float class="md-block">
-          <input ng-model="$ctrl.direccionTienda" type="text" placeholder="Dirección" id="phWhite">
-        </md-input-container>
-        <!-- Input segundoApellido -->
-        <md-input-container md-no-float class="md-block">
-          <input ng-model="$ctrl.telefonoTienda" type="text" placeholder="Teléfono" id="phWhite">
-        </md-input-container>
-        </div>
-      <!-- Boton submit del formulario -->
-      <md-button type="submit" class="md-raised md-warn">Registrar</md-button>
-    </form>
+    
+  <div ng-show="$ctrl.isAction && $ctrl.isHistorial" layout="column">
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model="$ctrl.selected">
+        <thead md-head md-order="fecha" md-on-reorder="$ctrl.logOrder">
+          <tr md-row>
+            <th md-column md-numeric md-order-by="numTarjeta"><span>Número de tarjeta</span></th>
+            <th md-column md-numeric md-desc md-order-by="fecha"><span>Fecha (Mes-día-año @ horas:min::seg)</span></th>                                    
+            <th md-column md-numeric md-order-by="importe"><span>Importe (€)</span></th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="compra" md-select-id="_id" md-auto-select
+          ng-repeat="compra in $ctrl.compras | orderBy: fecha | limitTo: $ctrl.query.limit: ($ctrl.query.page - 1) * $ctrl.query.limit">
+            <td md-cell>{{compra.numTarjeta}}</td>
+            <td md-cell>{{compra.fecha | date:'MMM-dd-yyyy @ HH:mm::ss'}}</td>                        
+            <td md-cell>{{compra.importe}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+    <md-table-pagination md-limit="$ctrl.query.limit" md-limit-options="[5, 10, 15]" md-page="$ctrl.query.page" md-total="{{$ctrl.compras.length}}" md-page-select></md-table-pagination>
   </div>
+
 </div>
+
+
+
+
+

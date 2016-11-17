@@ -10,28 +10,40 @@ class TiendasController {
     this.$mdDialog = $mdDialog;
     this.$document = $document;
     this.icon = './images/icon.png';
+    this.isAction = false;
     this.isRegistro = false;
-    this.isSocio = false;
-    this.isTienda = false;
+    this.isHistorial = false;
+    this.compras = [];
+    this.selected = [];
+    this.logOrder = (order => {
+      this.$log.debug(`Order: ${order}`);
+    });
+    this.query = {
+      order: '_id',
+      limit: 5,
+      page: 1
+    };
+    this.promise = null;
+    this.getCompras();
   }
 
   registrar(tipo) {
-    this.isRegistro = true;
+    this.isAction = true;
     if (tipo === 0) {
-      this.isSocio = true;
-      this.isTienda = false;
+      this.isRegistro = true;
+      this.isHistorial = false;
     }
     if (tipo === 1) {
-      this.isTienda = true;
-      this.isSocio = false;
+      this.isHistorial = true;
+      this.isRegistro = false;
     }
   }
 
   /* Funcion que se encarga de realizar el post de tarjetas */
-  registrarTarjeta() {
+  registrarCompra() {
     /* Ejecucion de post */
-    this.$http.post('http://localhost:8000/api/tarjetas', {nombre: this.nombre, primerApellido: this.primerApellido,
-      segundoApellido: this.segundoApellido, direccion: this.direccion, telefono: this.telefono, email: this.email})
+    this.$http.post('http://localhost:8000/api/compras', {nombreTienda: 'VIPS', numTarjeta: this.numTarjeta,
+      importe: this.importe})
       .then(res => {
         /* Caso de exito */
         this.$log.debug('Respuesta del backend', res);
@@ -40,29 +52,43 @@ class TiendasController {
             .parent(angular.element(this.$document.body))
             .clickOutsideToClose(true)
             .title('Registro')
-            .textContent('¡Se ha registrado correctamente!')
+            .textContent('¡Compra registrada correctamente!')
             .ok('Listo')
         );
+        this.numTarjeta = '';
+        this.importe = '';
       })
       .catch(reason => {
         /* Caso de fallo */
         this.$log.debug('Fallo del backend', reason);
+        this.$mdDialog.show(
+          this.$mdDialog.alert()
+            .parent(angular.element(this.$document.body))
+            .clickOutsideToClose(true)
+            .title('Registro')
+            .textContent('¡Número de tarjeta no registrada!')
+            .ok('Corregir')
+        );
       });
   }
 
-  /* Funcion que se encarga de realizar el post de tarjetas */
-  registrarTienda() {
-    /* Ejecucion de post */
-    this.$http.post('http://localhost:8000/api/tiendas', {nombreTienda: this.nombreTienda, direccion: this.direccionTienda,
-      telefono: this.telefonoTienda})
+  getCompras() {
+    this.$http.get('http://localhost:8000/api/compras')
       .then(res => {
-        /* Caso de exito */
-        this.$log.debug('Respuesta del backend', res);
+        this.$log.debug('Response from backend', res);
+        this.compras = res.data;
       })
       .catch(reason => {
-        /* Caso de fallo */
-        this.$log.debug('Fallo del backend', reason);
+        this.$log.debug('Fail fetching messages from backend', reason);
       });
+  }
+
+  success(compras) {
+    this.compras = compras;
+  }
+
+  get() {
+    this.promise = this.$nutrition.compras.get(this.query, this.success).$promise;
   }
 }
 

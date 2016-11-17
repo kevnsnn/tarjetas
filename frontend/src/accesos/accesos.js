@@ -43,10 +43,24 @@ class AccesosController {
             .textContent('¡Se ha registrado correctamente!')
             .ok('Listo')
         );
+        this.nombre = '';
+        this.primerApellido = '';
+        this.segundoApellido = '';
+        this.direccion = '';
+        this.telefono = '';
+        this.email = '';
       })
       .catch(reason => {
         /* Caso de fallo */
         this.$log.debug('Fallo del backend', reason);
+        this.$mdDialog.show(
+          this.$mdDialog.alert()
+            .parent(angular.element(this.$document.body))
+            .clickOutsideToClose(true)
+            .title('Registro')
+            .textContent('¡El email ya está en uso!')
+            .ok('Corregir')
+        );
       });
   }
 
@@ -58,10 +72,29 @@ class AccesosController {
       .then(res => {
         /* Caso de exito */
         this.$log.debug('Respuesta del backend', res);
+        this.$mdDialog.show(
+          this.$mdDialog.alert()
+            .parent(angular.element(this.$document.body))
+            .clickOutsideToClose(true)
+            .title('Registro')
+            .textContent('¡Se ha registrado correctamente!')
+            .ok('Listo')
+        );
+        this.nombreTienda = '';
+        this.direccionTienda = '';
+        this.telefonoTienda = '';
       })
       .catch(reason => {
         /* Caso de fallo */
         this.$log.debug('Fallo del backend', reason);
+        this.$mdDialog.show(
+          this.$mdDialog.alert()
+            .parent(angular.element(this.$document.body))
+            .clickOutsideToClose(true)
+            .title('Registro')
+            .textContent('¡Nombre de tienda ya está en uso!')
+            .ok('Corregir')
+          );
       });
   }
 }
