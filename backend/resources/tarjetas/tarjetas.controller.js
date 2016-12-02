@@ -77,4 +77,4 @@ function remove(req, res, next) {
 }
 
 /* Exportacion de funciones controladoras */
-export default { create }
+export default { list, create, modify, remove }
