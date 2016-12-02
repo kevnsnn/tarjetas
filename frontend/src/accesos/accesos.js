@@ -2,11 +2,13 @@
 class AccesosController {
 
   /* ngIngect */
-  constructor($http, $log, $state, $mdDialog, $document) {
+  constructor($http, $log, $state, $mdDialog, $document, $auth, $window) {
     /* Declaracion de variables y servicios */
     this.$http = $http;
     this.$log = $log;
+    this.$auth = $auth;
     this.$state = $state;
+    this.$window = $window;
     this.$mdDialog = $mdDialog;
     this.$document = $document;
     this.icon = './images/icon.png';
@@ -96,6 +98,36 @@ class AccesosController {
             .ok('Corregir')
           );
       });
+  }
+
+  loginUser() {
+    this.$log.debug('Logueando');
+    this.$auth.login({email: this.username, password: this.password})
+     .then(res => {
+       this.$log.debug('1');
+       this.$auth.setToken(res.data);
+       localStorage.setItem('user', this.usuario);
+       localStorage.setItem('type', 'socio');
+       this.$state.go('socios');
+     })
+     .catch(() => {
+       this.$log.debug('2');
+       this.$auth.login({nombreTienda: this.usuario, password: this.password})
+        .then(res => {
+          this.$log.debug('3');
+          this.$auth.setToken(res.data);
+          localStorage.setItem('user', this.usuario);
+          localStorage.setItem('type', 'tienda');
+          this.$state.go('tiendas');
+        })
+        .catch(reason => {
+          this.$log.debug('4');
+          this.$log.debug('Login: Fail login user from backend', reason);
+          this.$window.alert("Incorrect username or password");
+          this.usuario = '';
+          this.password = '';
+        });
+     });
   }
 }
 

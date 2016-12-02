@@ -1,13 +1,13 @@
 /* Clase del controlador del componente accesos */
-class TiendasController {
+class SociosController {
 
   /* ngIngect */
   constructor($http, $log, $state, $mdDialog, $document, $auth) {
     /* Declaracion de variables y servicios */
     this.$http = $http;
     this.$log = $log;
-    this.$state = $state;
     this.$auth = $auth;
+    this.$state = $state;
     this.$mdDialog = $mdDialog;
     this.$document = $document;
     this.icon = './images/icon.png';
@@ -92,7 +92,6 @@ class TiendasController {
   get() {
     this.promise = this.$nutrition.compras.get(this.query, this.success).$promise;
   }
-
   exit() {
     this.$auth.logout();
     this.$state.transitionTo('accesos');
@@ -100,7 +99,7 @@ class TiendasController {
 }
 
 /* Exportacion de componente */
-export const tiendas = {
-  template: require('./tiendas.html'),
-  controller: TiendasController
+export const socios = {
+  template: require('./socios.html'),
+  controller: SociosController
 };

@@ -1,6 +1,11 @@
 <!-- Accesos -->
 <div class="homeContent" layout="column" layout-fill layout-align="start center">
   <md-toolbar md-scroll-shrink>
+    <div>
+    <md-button class="md-fab md-mini md-warn" ng-click="$ctrl.exit()">
+      <md-icon class="material-icons" md-colors="{color: 'primary-50'}">exit_to_app</md-icon>
+    </md-button>
+  </div>
     <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
       <div layout="row" layout-align="space-around center">
         <img ng-src="{{ $ctrl.icon }}" class="icon"/>
@@ -11,11 +16,6 @@
       </div>
       <div layout="row" layout-align="start">
         <span class="subtitle"><sup>Tienda Zara</sup></span>
-         <div>
-          <md-button class="md-fab md-mini md-warn" ng-click="$ctrl.exit()">
-            <md-icon class="material-icons" md-colors="{color: 'primary-50'}">exit_to_app</md-icon>
-          </md-button>
-        </div>
       </div>
     </div>
   </md-toolbar>

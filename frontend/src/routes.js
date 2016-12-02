@@ -3,7 +3,7 @@
 export default routesConfig;
 
 /** @ngInject */
-function routesConfig($mdThemingProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
+function routesConfig($mdThemingProvider, $stateProvider, $urlRouterProvider, $locationProvider, $authProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('teal')
     .accentPalette('red')
@@ -15,22 +15,60 @@ function routesConfig($mdThemingProvider, $stateProvider, $urlRouterProvider, $l
   $stateProvider
     .state('home', {
       url: '/',
-      component: 'home'
+      component: 'home',
+      resolve: {redirectIfAuthenticated: _redirectIfAuthenticated}
     })
     .state('accesos', {
       url: '/accesos',
-      component: 'accesos'
+      component: 'accesos',
+      resolve: {redirectIfAuthenticated: _redirectIfAuthenticated}
     })
     .state('socios', {
       url: '/socios',
-      component: 'socios'
+      component: 'socios',
+      resolve: {redirectIfNotAuthenticated: _redirectIfNotAuthenticated}
     })
     .state('tiendas', {
       url: '/tiendas',
-      component: 'tiendas'
+      component: 'tiendas',
+      resolve: {redirectIfNotAuthenticated: _redirectIfNotAuthenticated}
     })
     .state('empresa', {
       url: '/empresa',
-      component: 'empresa'
+      component: 'empresa',
+      resolve: {redirectIfNotAuthenticated: _redirectIfNotAuthenticated}
     });
+
+  function _redirectIfNotAuthenticated($q, $state, $auth) {
+    const defer = $q.defer();
+    if ($auth.isAuthenticated()) {
+      defer.resolve();
+      if (localStorage.getItem('type') === 'tienda') {
+        $state.go('tiendas');
+      } else {
+        $state.go('socios');
+      }
+    } else {
+      defer.reject('You are not logged');
+      $state.go('accesos');
+    }
+    return defer.promise;
+  }
+
+  function _redirectIfAuthenticated($q, $state, $auth) {
+    const defer = $q.defer();
+    if ($auth.isAuthenticated()) {
+      defer.reject('You are logged');
+      if (localStorage.getItem('type') === 'tienda') {
+        $state.go('tiendas');
+      } else {
+        $state.go('socios');
+      }
+    } else {
+      defer.resolve();
+    }
+    return defer.promise;
+  }
+
+  $authProvider.loginUrl = 'http://localhost:8000/api/login';
 }
