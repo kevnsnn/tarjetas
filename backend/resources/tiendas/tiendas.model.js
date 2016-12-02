@@ -9,6 +9,10 @@ const TiendaSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  password: {
+    type: String,
+    required: true
+  },
   direccion: {
     type: String,
     required: true
@@ -37,6 +41,9 @@ TiendaSchema.statics = {
   /* Busca los datos de nombreTienda */
   findTienda(nombreTienda) {
     return this.findOne({ nombreTienda: nombreTienda });
+  },
+  findByCredentials(nombreTienda, password) {
+    return this.findOne({nombreTienda: nombreTienda, password: password}).select('-password');
   }
 };
 

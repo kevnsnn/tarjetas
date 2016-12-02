@@ -21,6 +21,10 @@ const TarjetaSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  password: {
+    type: String,
+    required: true
+  },
   direccion: {
     type: String,
     required: true
@@ -59,6 +63,9 @@ TarjetaSchema.statics = {
   /* Busca los datos de numTarjeta */
   findTarjeta(numTarjeta) {
     return this.findOne({ numTarjeta: numTarjeta });
+  },
+  findByCredentials(email, password) {
+    return this.findOne({email: email, password: password}).select('-password');
   }
 };
 
