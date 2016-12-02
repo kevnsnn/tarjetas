@@ -26,6 +26,14 @@ TiendaSchema.method({
 });
 
 TiendaSchema.statics = {
+  /* get: consulta todas las tiendas en DB*/
+  list() {
+    return this.find({});
+  },
+  /* put: Busca los datos de nombreTienda y actualiza los datos de modificaciones */
+  update(nombreTienda, modificaciones) {
+    return this.findOneAndUpdate({nombreTienda: nombreTienda}, modificaciones, {multi: true});
+  },
   /* Busca los datos de nombreTienda */
   findTienda(nombreTienda) {
     return this.findOne({ nombreTienda: nombreTienda });

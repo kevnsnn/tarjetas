@@ -8,8 +8,13 @@ import tiendasCtrl from './tiendas.controller';
 const router = express.Router();
 
 /* Rutas */
+/* Rutas */
 router.route('/')
+  .get(tiendasCtrl.list)       /* get: consulta datos sin filtros */
   .post(tiendasCtrl.create)    /* post: registro datos */
+router.route('/:nombreTienda')
+  .put(tiendasCtrl.modify)     /* put: actualizacion datos de nombreTienda */
+  .delete(tiendasCtrl.remove); /* delete: eliminacion datos de nombreTienda */
 
 /* Exportacion enrutamiento */
 export default router;
