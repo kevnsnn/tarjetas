@@ -156,7 +156,7 @@ function create(req, res, next) {
 /* put: Control actualizaciones de datos compra */
 function modify(req, res, next) {
   /* Llamada a consulta del modelo */
-  Compra.update(req.params.fecha, req.body)
+  Compra.update(req.params.id, req.body)
     .then(oldCompra => {
       /* Caso de exito */
       if (oldCompra) {
@@ -198,26 +198,32 @@ function modify(req, res, next) {
 
 /* delete: Control borrado de datos tarjetas */
 function remove(req, res, next) {
-      if(removed) {
-        /* Actualizacion de los puntos de la tarjeta que figura en la compra eliminada */
-        accumulate(removed.numTarjeta).then(isAccumulated => {
-          if (isAccumulated) {
-            /* Status: Eliminacion compra y acumulacion de puntos correcto + codigo: 204 + mensaje de exito */
-            res.status(204).json({ status: 0, msg: 'Compra eliminada y puntos modificados' });
-          } else {
-            /* Status: Eliminacion compra correcta, fallo en puntos + codigo: 204 + mensaje */                
-            res.status(204).json({ status: 1, msg: 'Compra eliminada pero puntos no modificados' }); 
-          }
-        }
-      } else {
-        /* Caso de eliminacion fallida por compra no encontrada */
-        res.status(404).json({ msg: 'Compra a eliminar no encontrada' }); /* Codigo: 404 + mensaje de fallo */ 
+  /* Busqueda de datos a borrar a partir de consulta del modelo */
+  Compra.findCompra(req.params.id)
+    .then(compra => {
+      /* Caso de exito */
+      /* Comprobacion de resultado */
+      if (compra) {
+        /* Eliminacion de datos a partir de objeto tipo schema obtenido de la consulta */
+        compra.remove()
+          .then(() => {
+          /* Actualizacion de los puntos de la tarjeta que figura en la compra eliminada */
+          accumulate(compra.numTarjeta).then(isAccumulated => {
+            if (isAccumulated) {
+              /* Status: Eliminacion compra y acumulacion de puntos correcto + codigo: 204 + mensaje de exito */
+              res.status(201).json({ status: 0, msg: 'Compra eliminada y puntos modificados' });
+            } else {
+              /* Status: Eliminacion compra correcta, fallo en puntos + codigo: 204 + mensaje */                
+              res.status(201).json({ status: 1, msg: 'Compra eliminada pero puntos no modificados' }); 
+            }
+          });
+        })
+        .catch(reason => {
+          /* Caso de fallo */
+          console.log('Error eliminando compra: ', reason);
+          res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
+        });
       }
-    })
-    .catch(reason => {
-      /* Caso de fallo */
-      console.log('Error eliminando compra: ', reason);
-      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 }
 

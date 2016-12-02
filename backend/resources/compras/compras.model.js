@@ -38,18 +38,21 @@ CompraSchema.statics = {
     return this.find({ numTarjeta: numTarjeta });
   },
   /* put: Busca los datos de una compra y actualiza los datos de modificaciones */
-  update(fecha, modificaciones) {
-    return this.findOneAndUpdate({ fecha: fecha }, modificaciones, { multi: true });
+  update(id, modificaciones) {
+    return this.findByIdAndUpdate(id, modificaciones, { multi: true });
   },
   /* Busca los datos de una compra */
-  findCompra(fecha) {
-    return this.findOne({ fecha: fecha });
+  findCompra(id) {
+    return this.findById(new mongoose.Types.ObjectId(id));
   },
   /* Busca los datos de una compra */
-  findNumTarjeta(fecha) {
-    return this.findOne({ fecha: fecha }).select('numTarjeta -_id');
+  findCompra2(id) {
+    return this.findById(id);
+  },
+  /* Busca los datos de una compra */
+  findCompra3(id) {
+    return this.findOne({ _id: id }, 'numTarjeta');
   }
-};
 };
 
 /* Exportacion de modelo tarjetas */
