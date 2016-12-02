@@ -42,7 +42,7 @@ class TiendasController {
   /* Funcion que se encarga de realizar el post de tarjetas */
   registrarCompra() {
     /* Ejecucion de post */
-    this.$http.post('http://localhost:8000/api/compras', {nombreTienda: 'VIPS', numTarjeta: this.numTarjeta,
+    this.$http.post('http://localhost:8000/api/compras', {nombreTienda: 'Zara', numTarjeta: this.numTarjeta,
       importe: this.importe})
       .then(res => {
         /* Caso de exito */
@@ -55,6 +55,7 @@ class TiendasController {
             .textContent('¡Compra registrada correctamente!')
             .ok('Listo')
         );
+        this.getCompras();
         this.numTarjeta = '';
         this.importe = '';
       })

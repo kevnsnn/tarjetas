@@ -17,16 +17,16 @@
   <md-content>
     <section>
     <md-subheader class="subhead">
-        <div layout="row" layout-align="space-around center">
-          <div layout="row">
+        <div layout="row" layout-align="space-around end">
+          <div layout="row" layout-align="space-around end">
             <img ng-src="{{ $ctrl.icon }}" class="icon"/>
-            <span class="md-headline">Ingeniería del Software II</span>
+            <span class="title"><b>TARJETA</b></span>
           </div>
           <md-nav-bar md-selected-nav-item="currentNavItem">
             <md-nav-item md-nav-click="goto('page1')" name="page1">Premios</md-nav-item>
             <md-nav-item md-nav-sref="app.page2" name="page2">Tiendas</md-nav-item>
           </md-nav-bar>
-          <md-button class="md-raised md-warn" href="/accesos">Acceder</md-button>
+          <md-button class="md-raised md-warn" id="acceder" href="/accesos">Acceder</md-button>
         </div>
     </md-subheader>
       <p>as</p>

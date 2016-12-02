@@ -1,8 +1,8 @@
 /***************** Hoja de estilos *****************/
 /******************** Colores ******************/
-@boxSign: #C0CA33;
+@boxSign: #455A64;
 @resaltoText: #80CBC4;
-@subhead: #64B5F6;
+@subhead: #26A69A;
 
 /******************** Estilos ******************/
 /* caja de registro */
@@ -15,7 +15,9 @@
 }
 
 /* Home content */
-.homeContent { overflow: hidden; }
+.homeContent {
+  overflow: hidden;
+}
 
 /* Top toolbar */
 .topToolbar {
@@ -37,20 +39,21 @@
 
 /* Dimensiones icono de empresa */
 .icon {
-  height: 40px;
-  width: 40px;
+  max-height: 40px;
+  max-width: 40px;
 }
 
 .topForm {
-  height: 60px;
+  max-height: 50px;
 }
 
-.botonLogin {
-  height: 40px;  
+.md-toolbar-tools .md-button {
+    margin-top: -23px;
+    margin-bottom: 0px;
 }
 
 .accessInfo {
-  height: 10px;
+  min-height: 10px;
 }
 
 .formTarjeta {
@@ -74,3 +77,41 @@
 }
 
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
+
+.title { font-size: 22px; }
+
+.subtitle { font-size: 15px; }
+
+.registroTitle { color: #FFFFFF; }
+
+#phGrey::-webkit-input-placeholder {
+  color: #757575;
+}
+
+#phGrey:-moz-placeholder {
+  color: #757575;
+}
+
+#phGrey::-moz-placeholder {
+  color: #757575;
+}
+
+#phGrey:-ms-input-placeholder {
+  color: #757575;
+}
+
+#phGreyF::-webkit-input-placeholder {
+  color: #BDBDBD;
+}
+
+#phGreyF:-moz-placeholder {
+  color: #BDBDBD;
+}
+
+#phGreyF::-moz-placeholder {
+  color: #BDBDBD;
+}
+
+#phGreyF:-ms-input-placeholder {
+  color: #BDBDBD;
+}

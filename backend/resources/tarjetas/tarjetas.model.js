@@ -48,13 +48,9 @@ TarjetaSchema.method({
 });
 
 TarjetaSchema.statics = {
-  /* get: consulta todas las tarjetas en DB*/
-  list() {
-    return this.find({});
-  },
   /* put: Busca los datos de numTarjeta y actualiza los datos de modificaciones */
   update(numTarjeta, modificaciones) {
-    return this.findOneAndUpdate({numTarjeta: numTarjeta}, modificaciones, {multi: true});
+    return this.findOneAndUpdate({ numTarjeta: numTarjeta }, modificaciones, { multi: true });
   },
   /* Busca los datos de numTarjeta */
   findTarjeta(numTarjeta) {

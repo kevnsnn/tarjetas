@@ -2,31 +2,35 @@
 <div class="homeContent" layout="column" layout-fill layout-align="start center">
   <md-toolbar md-scroll-shrink>
     <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
-      <div>
+      <div layout="row" layout-align="space-around center">
         <img ng-src="{{ $ctrl.icon }}" class="icon"/>
-        <span class="md-headline">Ingeniería del Software II</span>
+        <span class="title"><b>TARJETA</b></span>
       </div>
-      <span class="md-subhead accessInfo">Tienda {{ $ctrl.nombreTienda }}</span>      
-      <span class="md-subhead accessInfo">¡Gestiona tus compras!</span>
+      <div layout="row" layout-align="start">
+        <span class="subtitle"><sup><em>¡Gestiona tus compras!</em></sup></span>
+      </div>
+      <div layout="row" layout-align="start">
+        <span class="subtitle"><sup>Tienda Zara</sup></span>
+      </div>
     </div>
   </md-toolbar>
   <div layout="row" layout-align="center center">
-    <md-button class="md-raised" md-colors="{background: 'green'}" ng-click="$ctrl.registrar(0)">Registro de compras</md-button>
-    <md-button class="md-raised" md-colors="{background: 'teal'}" ng-click="$ctrl.registrar(1)">Historial de compras</md-button>      
+    <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.registrar(0)">Registro de compras</md-button>
+    <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.registrar(1)">Historial de compras</md-button>      
   </div>
   <div layout="column" class="box formTarjeta" ng-show="$ctrl.isAction && $ctrl.isRegistro" layout-align="center">
-      <h2>Registro de compras</h2>
+      <h2 class="registroTitle">Registro de compras</h2>
       <!-- Formulario tarjetas -->
     <form ng-submit="$ctrl.registrarCompra()">
       <!-- Input nombreTienda -->
       <md-input-container md-no-float class="md-block">
         <md-icon class="material-icons md-light">credit_card</md-icon>
-        <input ng-model="$ctrl.numTarjeta" type="text" placeholder="Número de tarjeta de socio" id="phWhite">
+        <input ng-model="$ctrl.numTarjeta" type="text" placeholder="Número de tarjeta de socio" id="phGrey">
       </md-input-container>
       <!-- Input importe -->
       <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">attach_money</md-icon>        
-        <input ng-model="$ctrl.importe" type="text" placeholder="Importe de compra" id="phWhite">
+        <md-icon class="material-icons md-light">euro_symbol</md-icon>        
+        <input ng-model="$ctrl.importe" type="text" placeholder="Importe de compra" id="phGrey">
       </md-input-container>
       <!-- Boton submit del formulario -->
       <md-button type="submit" class="md-raised md-warn">Registrar</md-button>

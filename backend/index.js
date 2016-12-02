@@ -5,11 +5,8 @@ import Promise from 'bluebird';
 import mongoose from 'mongoose';
 import http from 'http';
 import cors from 'cors';
-import fs from 'fs';
-import schedule from 'node-schedule';
 /* Librerias locales */
 import config from './config';
-import tasks from './tasks';
 
 // Uso de promesas tipo bluebird en lugar de tipo mongoose
 mongoose.Promise = Promise;
@@ -45,13 +42,6 @@ app.use(bodyParser.json());
 
 /* Montaje recursos de API */
 app.use('/api', require('./resources/routes').default);
-
-/* Tareas mensuales */
-let j = schedule.scheduleJob('* 0 9 1 * *', () => {
-  tasks.global();
-  tasks.premios();
-  tasks.movimientos();
-})
 
 /* Endpoint por defecto */
 app.use((req, res, next) => {

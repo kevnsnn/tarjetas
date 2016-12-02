@@ -11,9 +11,6 @@ const router = express.Router();
 router.route('/')
   .get(comprasCtrl.list)       /* get: consulta datos sin filtros */
   .post(comprasCtrl.create)    /* post: registro datos */
-router.route('/:fecha')
-  .put(comprasCtrl.modify)     /* put: actualizacion datos de compra */
-  .delete(comprasCtrl.remove); /* delete: eliminacion datos de compra */
 
 /* Exportacion enrutamiento */
 export default router;

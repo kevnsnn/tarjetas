@@ -5,10 +5,9 @@ export default routesConfig;
 /** @ngInject */
 function routesConfig($mdThemingProvider, $stateProvider, $urlRouterProvider, $locationProvider) {
   $mdThemingProvider.theme('default')
-    .primaryPalette('blue')
-    .accentPalette('orange')
-    .warnPalette('red')
-    .backgroundPalette('grey');
+    .primaryPalette('teal')
+    .accentPalette('red')
+    .warnPalette('blue');
   $locationProvider.html5Mode(true).hashPrefix('!');
   $urlRouterProvider.otherwise('/'); /* Ruta por defecto o en caso de fallo */
 
