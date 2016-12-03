@@ -12,6 +12,7 @@ router.route('/')
   .get(tarjetasCtrl.list)       /* get: consulta datos sin filtros */
   .post(tarjetasCtrl.create)    /* post: registro datos */
 router.route('/:numTarjeta')
+  .get(tarjetasCtrl.findTarjeta)/* get: consulta datos una tarjeta */
   .put(tarjetasCtrl.modify)     /* put: actualizacion datos de numTarjeta */
   .delete(tarjetasCtrl.remove); /* delete: eliminacion datos de numTarjeta */
 

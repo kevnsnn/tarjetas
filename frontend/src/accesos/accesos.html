@@ -10,16 +10,15 @@
         <span class="subtitle"><sup><em>¡Acceso a socios y tiendas!</em></sup></span>
       </div>
       <div flex=40>
-      <form name="userForm" ng-submit="$ctrl.loginUser()" layout="row" layout-align="center center">
+      <form name="loginForm" ng-submit="loginForm.$valid && $ctrl.loginUser()" layout="row" layout-align="center center">
         <!-- Username -->
         <div>
         <md-input-container required md-no-float>
           <md-icon class="material-icons md-light">person</md-icon>
-          <input style="color: white" required ng-maxlength="30" type="text" placeholder="Usuario" ng-model="$ctrl.usuario" name="usuario" id="phGreyF">
+          <input style="color: white" required type="text" placeholder="Usuario" ng-model="$ctrl.usuario" name="usuario" id="phGreyF">
           <!-- Username error messages -->
-          <div ng-messages="userForm.username.$error">
-            <div ng-message="required">Required username.</div>
-            <div ng-message="maxlength">Max length of 30 characters</div>
+          <div ng-messages="loginForm.usuario.$error">
+            <div ng-message="required">Requiere usuario</div>
           </div>
         </md-input-container>
         </div>
@@ -28,10 +27,9 @@
         <md-input-container md-no-float class="md-block">
           <md-icon class="material-icons md-light">lock</md-icon>
           <input style="color: white" required ng-maxlength="30" type="password" placeholder="Contraseña" ng-model="$ctrl.password" name="password" id="phGreyF">
-          <!-- Username error messages -->
-          <div ng-messages="userForm.password.$error">
-            <div ng-message="required">Required password.</div>
-            <div ng-message="maxlength">Max length of 30 characters</div>
+          <!-- Password error messages -->
+          <div ng-messages="loginForm.password.$error">
+            <div ng-message="required">Requiere contraseña</div>
           </div>
         </md-input-container>
         </div>
@@ -45,67 +43,156 @@
     <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.registrar(0)">Registro de socios</md-button>
     <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.registrar(1)">Registro de tiendas</md-button>      
   </div>
-  <div layout="column" class="box formTarjeta" ng-show="$ctrl.isRegistro && $ctrl.isSocio" layout-align="center">
+  <div layout="column" class="box formTarjeta animate-hide" ng-show="$ctrl.isRegistro && $ctrl.isSocio" layout-align="center">
       <h2 class="registroTitle">Registro de Socios</h2>
       <!-- Formulario tarjetas -->
-    <form ng-submit="$ctrl.registrarTarjeta()">
+    <form name="socioForm" ng-submit="socioForm.$valid && $ctrl.registrarTarjeta()">
       <div layout="row">        
-      <!-- Input nombre -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">person</md-icon>        
-        <input style="color: white" ng-model="$ctrl.nombre" type="text" placeholder="Nombre" id="phGrey">
-      </md-input-container>
+        <!-- Input nombre -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">person</md-icon>        
+          <input required style="color: white" ng-model="$ctrl.nombre" name="nombre" type="text" placeholder="Nombre" id="phGrey">
+          <!-- Nombre error messages -->
+          <div ng-messages="socioForm.nombre.$error">
+            <div ng-message="required">Requiere nombre</div>
+          </div>
+        </md-input-container>
         <!-- Input primerApellido -->
         <md-input-container md-no-float class="md-block">
-          <input style="color: white" ng-model="$ctrl.primerApellido" type="text" placeholder="Primer apellido" id="phGrey">
+          <input required style="color: white" ng-model="$ctrl.primerApellido" name="primerApellido" type="text" placeholder="Primer apellido" id="phGrey">
+          <!-- primer apellido error messages -->
+          <div ng-messages="socioForm.primerApellido.$error">
+            <div ng-message="required">Requiere primer apellido</div>
+          </div>
         </md-input-container>
         <!-- Input segundoApellido -->
         <md-input-container md-no-float class="md-block">
-          <input style="color: white" ng-model="$ctrl.segundoApellido" type="text" placeholder="Segundo apellido" id="phGrey">
+          <input required style="color: white" ng-model="$ctrl.segundoApellido" name="segundoApellido" type="text" placeholder="Segundo apellido" id="phGrey">
+          <!-- segundo apellido error messages -->
+          <div ng-messages="socioForm.segundoApellido.$error">
+            <div ng-message="required">Requiere segundo apellido</div>
+          </div>
         </md-input-container>
-        </div>
-      <div layout="row">                
-      <!-- Input direccion -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">home</md-icon>
-        <input style="color: white" ng-model="$ctrl.direccion" type="text" placeholder="Dirección" id="phGrey">
-      </md-input-container>
-      <!-- Input telefono -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">phone</md-icon>        
-        <input style="color: white" ng-model="$ctrl.telefono" type="text" placeholder="Teléfono" id="phGrey">
-      </md-input-container>
-      <!-- Input email -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">email</md-icon>        
-        <input style="color: white" ng-model="$ctrl.email" type="email" placeholder="Email" id="phGrey">
-      </md-input-container>
-      </div>        
+      </div>
+      <div layout="row">
+        <!-- Input direccion -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">home</md-icon>
+          <input required style="color: white" ng-model="$ctrl.direccion" name="direccion" type="text" placeholder="Dirección" id="phGrey">
+          <!-- direccion error messages -->
+          <div ng-messages="socioForm.direccion.$error">
+            <div ng-message="required">Requiere dirección</div>
+          </div>
+        </md-input-container>                
+        <!-- Input telefono -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">phone</md-icon>        
+          <input required style="color: white" ng-model="$ctrl.telefono" name="telefono" type="text" placeholder="Teléfono" id="phGrey">
+          <!-- telefono error messages -->
+          <div ng-messages="socioForm.telefono.$error">
+            <div ng-message="required">Requiere número de teléfono</div>
+          </div>
+        </md-input-container>
+         <!-- Input email -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">email</md-icon>        
+          <input required style="color: white" ng-model="$ctrl.email" name="email" type="email" placeholder="Email" id="phGrey">
+          <!-- email error messages -->
+          <div ng-messages="socioForm.email.$error">
+            <div ng-message="required">Requiere email</div>
+            <div ng-message="email">No es un email</div>            
+          </div>
+        </md-input-container>
+      </div>
+      <div layout="row">      
+        <!-- Password -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">lock</md-icon>
+          <input required ng-maxlength="30" ng-minlength="6" type="password" placeholder="Contraseña"
+          ng-model="$ctrl.passwordS" name="passwordS" id="phGrey" ng-pattern="/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/">
+          <!-- Password error messages -->
+          <div ng-messages="socioForm.passwordS.$error">
+            <div ng-message="required">Requiere contraseña</div>
+            <div ng-message="pattern">Requiere contraseña alfanumérica</div>
+            <div ng-message="maxlength">Máxima longitud de 30 caracteres</div>
+            <div ng-message="minlength">Mínima longitud de 6 caracteres</div>
+          </div>
+        </md-input-container>
+        <!-- Confirm Password -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">security</md-icon>
+          <input match-password="passwordS" required type="password" placeholder="Confirme contraseña"
+          ng-model="$ctrl.confirmPasswordS" name="confirmPasswordS" id="phGrey">
+          <!-- Confirm password error messages -->
+          <div ng-messages="socioForm.confirmPasswordS.$error">
+            <div ng-message="required">Requiere confirmar la contraseña</div>
+            <div ng-message="passwordMatch">La contraseña no es la misma</div>
+          </div>
+        </md-input-container>
+      </div>
       <!-- Boton submit del formulario -->
       <md-button type="submit" id="regTarjeta" class="md-raised md-warn">Registrar</md-button>
     </form>
   </div>
-  <div layout="column" class="box formTarjeta" ng-show="$ctrl.isRegistro && $ctrl.isTienda" layout-align="center">
-      <h2 class="registroTitle">Registro de Tiendas</h2>
-      <!-- Formulario tarjetas -->
-    <form ng-submit="$ctrl.registrarTienda()">
+  <div layout="column" class="box formTarjeta animate-hide" ng-show="$ctrl.isRegistro && $ctrl.isTienda" layout-align="center">
+    <h2 class="registroTitle">Registro de Tiendas</h2>
+      <!-- Formulario tiendas -->
+    <form name="tiendaForm" ng-submit="tiendaForm.$valid && $ctrl.registrarTienda()">
       <div layout="row">
-      <!-- Input nombre -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">shop</md-icon>
-        <input style="color: white" ng-model="$ctrl.nombreTienda" type="text" placeholder="Nombre de la tienda" id="phGrey">
-      </md-input-container>
-        <!-- Input primerApellido -->
+        <!-- Input nombre tienda -->
         <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">home</md-icon>
-          <input style="color: white" ng-model="$ctrl.direccionTienda" type="text" placeholder="Dirección" id="phGrey">
+          <md-icon class="material-icons md-light">shop</md-icon>
+          <input required style="color: white" ng-model="$ctrl.nombreTienda" name="nombreTienda" type="text" placeholder="Nombre de la tienda" id="phGrey">
+          <!-- nombre tienda error messages -->
+          <div ng-messages="tiendaForm.nombreTienda.$error">
+            <div ng-message="required">Requiere nombre de la tienda</div>
+          </div>
         </md-input-container>
-        <!-- Input segundoApellido -->
+        <!-- Input direccion tienda -->
         <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">phone</md-icon>
-          <input style="color: white" ng-model="$ctrl.telefonoTienda" type="text" placeholder="Teléfono" id="phGrey">
+          <md-icon class="material-icons md-light">home</md-icon>
+          <input required style="color: white" ng-model="$ctrl.direccionTienda" name="direccionTienda" type="text" placeholder="Dirección" id="phGrey">
+          <!-- direccion tienda error messages -->
+          <div ng-messages="tiendaForm.direccionTienda.$error">
+            <div ng-message="required">Requiere dirección de la tienda</div>
+          </div>
         </md-input-container>
-        </div>
+        <!-- Input telefono tienda -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">phone</md-icon>
+          <input required style="color: white" ng-model="$ctrl.telefonoTienda" name="telefonoTienda" type="text" placeholder="Teléfono" id="phGrey">
+          <!-- telefono tienda error messages -->
+          <div ng-messages="tiendaForm.telefonoTienda.$error">
+            <div ng-message="required">Requiere número de teléfono de la tienda</div>
+          </div>
+        </md-input-container>
+      </div>
+      <div layout="row">            
+        <!-- Password -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">lock</md-icon>
+          <input required ng-maxlength="30" ng-minlength="6" type="password" placeholder="Password"
+          ng-model="$ctrl.passwordT" name="passwordT" id="phGrey" ng-pattern="/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/">
+          <!-- Password error messages -->
+          <div ng-messages="tiendaForm.passwordT.$error">
+            <div ng-message="required">Requiere contraseña</div>
+            <div ng-message="pattern">Requiere contraseña alfanumérica</div>
+            <div ng-message="maxlength">Máxima longitud de 30 caracteres</div>
+            <div ng-message="minlength">Mínima longitud de 6 caracteres</div>
+          </div>
+        </md-input-container>
+        <!-- Confirm Password -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">security</md-icon>
+          <input required match-password="passwordT" type="password" placeholder="Confirme contraseña"
+          ng-model="$ctrl.confirmPasswordT" name="confirmPasswordT" id="phGrey">
+          <!-- Confirm password error messages -->
+          <div ng-messages="tiendaForm.confirmPasswordT.$error">
+            <div ng-message="required">Requiere confirmar contraseña</div>
+            <div ng-message="passwordMatch">La contraseña no es la misma</div>
+          </div>
+        </md-input-container>
+      </div>
       <!-- Boton submit del formulario -->
       <md-button type="submit" id="regTienda" class="md-raised md-warn">Registrar</md-button>
     </form>

@@ -44,14 +44,6 @@ CompraSchema.statics = {
   /* Busca los datos de una compra */
   findCompra(id) {
     return this.findById(new mongoose.Types.ObjectId(id));
-  },
-  /* Busca los datos de una compra */
-  findCompra2(id) {
-    return this.findById(id);
-  },
-  /* Busca los datos de una compra */
-  findCompra3(id) {
-    return this.findOne({ _id: id }, 'numTarjeta');
   }
 };
 

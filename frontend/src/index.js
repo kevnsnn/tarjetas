@@ -10,6 +10,7 @@ import 'material-design-icons';
 import 'angular-material-data-table';
 import 'angular-messages';
 import 'satellizer';
+import 'angular-password';
 
 /* Librerias locales */
 import {home} from './home/home';
@@ -26,7 +27,7 @@ export const app = 'app';
 
 /* Configuracion angular */
 angular
-  .module(app, ['ui.router', 'ngMaterial', 'md.data.table', 'ngMessages', 'satellizer']) /* Declaracion de modulos inyectados */
+  .module(app, ['ui.router', 'ngMaterial', 'md.data.table', 'ngMessages', 'satellizer', 'ngAria', 'ngPassword']) /* Declaracion de modulos inyectados */
   .config(routesConfig) /* Enrutamiento */
   .component('home', home) /* Componente angular del recurso home */
   .component('accesos', accesos) /* Componente angular del recurso accesos */

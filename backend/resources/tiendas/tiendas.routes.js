@@ -13,6 +13,7 @@ router.route('/')
   .get(tiendasCtrl.list)       /* get: consulta datos sin filtros */
   .post(tiendasCtrl.create)    /* post: registro datos */
 router.route('/:nombreTienda')
+  .get(tiendasCtrl.findTienda) /* get: consulta datos una tienda */
   .put(tiendasCtrl.modify)     /* put: actualizacion datos de nombreTienda */
   .delete(tiendasCtrl.remove); /* delete: eliminacion datos de nombreTienda */
 

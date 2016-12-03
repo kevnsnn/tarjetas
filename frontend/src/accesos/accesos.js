@@ -33,7 +33,8 @@ class AccesosController {
   registrarTarjeta() {
     /* Ejecucion de post */
     this.$http.post('http://localhost:8000/api/tarjetas', {nombre: this.nombre, primerApellido: this.primerApellido,
-      segundoApellido: this.segundoApellido, direccion: this.direccion, telefono: this.telefono, email: this.email})
+      segundoApellido: this.segundoApellido, direccion: this.direccion, telefono: this.telefono, email: this.email,
+      password: this.passwordS})
       .then(res => {
         /* Caso de exito */
         this.$log.debug('Respuesta del backend', res);
@@ -51,6 +52,8 @@ class AccesosController {
         this.direccion = '';
         this.telefono = '';
         this.email = '';
+        this.passwordS = '';
+        this.confirmPasswordS = '';
       })
       .catch(reason => {
         /* Caso de fallo */
@@ -70,7 +73,7 @@ class AccesosController {
   registrarTienda() {
     /* Ejecucion de post */
     this.$http.post('http://localhost:8000/api/tiendas', {nombreTienda: this.nombreTienda, direccion: this.direccionTienda,
-      telefono: this.telefonoTienda})
+      telefono: this.telefonoTienda, password: this.passwordT})
       .then(res => {
         /* Caso de exito */
         this.$log.debug('Respuesta del backend', res);
@@ -85,6 +88,8 @@ class AccesosController {
         this.nombreTienda = '';
         this.direccionTienda = '';
         this.telefonoTienda = '';
+        this.passwordT = '';
+        this.confirmPasswordT = '';
       })
       .catch(reason => {
         /* Caso de fallo */
@@ -102,7 +107,7 @@ class AccesosController {
 
   loginUser() {
     this.$log.debug('Logueando');
-    this.$auth.login({email: this.username, password: this.password})
+    this.$auth.login({email: this.usuario, password: this.password})
      .then(res => {
        this.$log.debug('1');
        this.$auth.setToken(res.data);

@@ -7,23 +7,40 @@
         <span class="title"><b>TARJETA</b></span>
       </div>
       <div layout="row" layout-align="start">
-        <span class="subtitle"><sup><em>¡Gestiona tus compras!</em></sup></span>
+        <span style="margin-top: 10px" class="subtitle"><sup><em>¡Gestiona tus compras!</em></sup></span>
       </div>
-      <div layout="row" layout-align="start">
-        <span class="subtitle"><sup>Tienda Zara</sup></span>
-         <div>
-          <md-button class="md-fab md-mini md-warn" ng-click="$ctrl.exit()">
-            <md-icon class="material-icons" md-colors="{color: 'primary-50'}">exit_to_app</md-icon>
-          </md-button>
+      <div layout="row">
+        <span style="margin-top: 10px" class="subtitle"><sup>Tienda {{ $ctrl.user }}</sup></span>
+        <!-- Fab Speed dial -->
+        <div style="margin-top: 14px">
+          <md-fab-speed-dial class="md-scale" md-direction="left">
+            <md-fab-trigger>
+              <md-button class="md-fab md-mini md-warn">
+                <md-icon class="material-icons" md-colors="{color: 'primary-50'}">more_vert</md-icon>
+              </md-button>
+            </md-fab-trigger>
+            <!-- Actions fab speed dial-->
+            <md-fab-actions>
+              <md-button class="md-fab md-mini md-warn md-hue-3" ng-click="$ctrl.exit()">
+                <md-icon class="material-icons" md-colors="{color: 'primary-50'}">exit_to_app</md-icon>
+              </md-button>
+              <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="!$ctrl.isSettings" ng-click="$ctrl.isSettings = true">
+                <md-icon class="material-icons" md-colors="{color: 'primary-50'}">settings</md-icon>
+              </md-button>
+              <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="$ctrl.isSettings" ng-click="$ctrl.isSettings = false">
+                <md-icon class="material-icons" md-colors="{color: 'primary-50'}">shop</md-icon>
+              </md-button>
+            </md-fab-actions>
+          </md-fab-speed-dial>
         </div>
       </div>
     </div>
   </md-toolbar>
-  <div layout="row" layout-align="center center">
+  <div layout="row" layout-align="center center" class="animate-hide" ng-hide="$ctrl.isSettings">
     <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.registrar(0)">Registro de compras</md-button>
     <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.registrar(1)">Historial de compras</md-button>      
   </div>
-  <div layout="column" class="box formTarjeta" ng-show="$ctrl.isAction && $ctrl.isRegistro" layout-align="center">
+  <div layout="column" class="box formTarjeta animate-hide" ng-show="$ctrl.isAction && $ctrl.isRegistro && !$ctrl.isSettings" layout-align="center">
       <h2 class="registroTitle">Registro de compras</h2>
       <!-- Formulario tarjetas -->
     <form ng-submit="$ctrl.registrarCompra()">
@@ -41,8 +58,7 @@
       <md-button type="submit" class="md-raised md-warn">Registrar</md-button>
     </form>
   </div>
-    
-  <div ng-show="$ctrl.isAction && $ctrl.isHistorial" layout="column">
+  <div class="animate-hide" ng-show="$ctrl.isAction && $ctrl.isHistorial && !$ctrl.isSettings" layout="column">
     <md-table-container>
       <table md-table md-row-select multiple ng-model="$ctrl.selected">
         <thead md-head md-order="fecha" md-on-reorder="$ctrl.logOrder">
@@ -64,7 +80,32 @@
     </md-table-container>
     <md-table-pagination md-limit="$ctrl.query.limit" md-limit-options="[5, 10, 15]" md-page="$ctrl.query.page" md-total="{{$ctrl.compras.length}}" md-page-select></md-table-pagination>
   </div>
-
+  <div layout="column" style="margin-top: 10px" class="box formTarjeta animate-hide" ng-show="$ctrl.isSettings" layout-align="center">
+    <h2 class="registroTitle">Modifica tus datos</h2>
+    <!-- Formulario tiendas -->
+    <form ng-submit="$ctrl.modificarTienda()">
+      <div layout="row">
+      <!-- Input nombre -->
+      <md-input-container md-no-float class="md-block">
+        <md-icon class="material-icons md-light">shop</md-icon>
+        <input style="color: white" ng-disabled="true" ng-model="$ctrl.nombreTienda" type="text" placeholder="Nombre de la tienda" id="phGrey">
+      </md-input-container>
+        <!-- Input primerApellido -->
+        <md-input-container md-no-float class="md-block">
+        <md-icon class="material-icons md-light">home</md-icon>
+          <input style="color: white" ng-model="$ctrl.direccionTienda" type="text" placeholder="Dirección" id="phGrey">
+        </md-input-container>
+        <!-- Input segundoApellido -->
+        <md-input-container md-no-float class="md-block">
+        <md-icon class="material-icons md-light">phone</md-icon>
+          <input style="color: white" ng-model="$ctrl.telefonoTienda" type="text" placeholder="Teléfono" id="phGrey">
+        </md-input-container>
+        </div>
+      <!-- Boton submit del formulario -->
+      <md-button type="submit" id="regTienda" class="md-raised md-warn">Modificar</md-button>
+      <md-button type="button" id="elimTienda" ng-click="$ctrl.eliminarCuenta($event)" class="md-warn">Eliminar Cuenta</md-button>      
+    </form>
+  </div>
 </div>
 
 

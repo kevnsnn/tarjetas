@@ -40,7 +40,7 @@ TiendaSchema.statics = {
   },
   /* Busca los datos de nombreTienda */
   findTienda(nombreTienda) {
-    return this.findOne({ nombreTienda: nombreTienda });
+    return this.findOne({ nombreTienda: nombreTienda }).select('-_id -password');
   },
   findByCredentials(nombreTienda, password) {
     return this.findOne({nombreTienda: nombreTienda, password: password}).select('-password');

@@ -17,6 +17,21 @@ function list (req, res, next) {
     });
 }
 
+/* get: Control de consulta de datos de una tienda */
+function findTienda (req, res, next) {
+    /* Llamada a consulta del modelo */
+    Tienda.findTienda(req.params.nombreTienda)
+    .then(tienda => {
+        /* Caso de exito */
+        res.status(200).json(tienda); /* Codigo: 200 + resultado de consulta por cuerpo */
+    })
+    .catch(reason => {
+        /* Caso de fallo */
+        console.log('Error buscando tienda: ', reason);
+      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
+    });
+}
+
 /* post: Control registro de datos tiendas */
 function create(req, res, next) {
   /* Construccion objeto tipo schema tiendas a partir de datos del cuerpo */
@@ -42,7 +57,7 @@ function modify(req, res, next) {
       /* Caso de exito */
       if (tienda) {
         /* Caso de actualizacion de datos correcta */
-        res.status(201).json({ msg: 'Tienda modificada' }); /* Codigo: 201 + mensaje de exito */  
+        res.status(200).json(tienda); /* Codigo: 201 + mensaje de exito */  
       } else {
         res.status(404).json({ msg: 'Tienda a modificar no encontrada' }); /* Codigo: 404 + mensaje de fallo */
       }
@@ -72,4 +87,4 @@ function remove(req, res, next) {
 }
 
 /* Exportacion de funciones controladoras */
-export default { list, create, modify, remove }
+export default { list, findTienda, create, modify, remove }
