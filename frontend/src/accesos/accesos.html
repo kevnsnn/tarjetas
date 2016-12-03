@@ -9,7 +9,7 @@
       <div layout="row" layout-align="start">
         <span class="subtitle"><sup><em>¡Acceso a socios y tiendas!</em></sup></span>
       </div>
-      <div flex=40>
+      <div flex=40 style="margin-top: -14px">
       <form name="loginForm" ng-submit="loginForm.$valid && $ctrl.loginUser()" layout="row" layout-align="center center">
         <!-- Username -->
         <div>
@@ -44,8 +44,8 @@
     <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.registrar(1)">Registro de tiendas</md-button>      
   </div>
   <div layout="column" class="box formTarjeta animate-hide" ng-show="$ctrl.isRegistro && $ctrl.isSocio" layout-align="center">
-      <h2 class="registroTitle">Registro de Socios</h2>
-      <!-- Formulario tarjetas -->
+    <h2 class="registroTitle">Registro de Socios</h2>
+    <!-- Formulario tarjetas -->
     <form name="socioForm" ng-submit="socioForm.$valid && $ctrl.registrarTarjeta()">
       <div layout="row">        
         <!-- Input nombre -->

@@ -18,9 +18,9 @@ function list (req, res, next) {
 }
 
 /* get: Control de consulta de datos de una tarjeta */
-function findTarjeta (req, res, next) {
+function findByEmail (req, res, next) {
     /* Llamada a consulta del modelo */
-    Tienda.findTarjeta(req.params.numTarjeta)
+    Tarjeta.findByEmail(req.params.email)
     .then(tarjeta => {
         /* Caso de exito */
         res.status(200).json(tarjeta); /* Codigo: 200 + resultado de consulta por cuerpo */
@@ -92,4 +92,4 @@ function remove(req, res, next) {
 }
 
 /* Exportacion de funciones controladoras */
-export default { list, findTarjeta, create, modify, remove }
+export default { list, findByEmail, create, modify, remove }

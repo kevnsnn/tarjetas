@@ -15,21 +15,30 @@ class TiendasController {
     this.$document = $document;
     this.icon = './images/icon.png';
     this.isAction = false;
+    this.isSerchingH = false;
+    this.isSerchingC = false;
     this.isRegistro = false;
+    this.newCompra = false;
     this.isHistorial = false;
     this.tienda = null;
     this.compras = [];
-    this.selected = [];
-    this.logOrder = (order => {
-      this.$log.debug(`Order: ${order}`);
-    });
+    this.tarjetas = [];
+    this.selectedC = [];
+    this.selectedH = [];
     this.query = {
+      filter: '',
       order: '_id',
       limit: 5,
       page: 1
     };
     this.promise = null;
+    this.filter = {
+      options: {
+        debounce: 500
+      }
+    };
     this.getCompras();
+    this.getTarjetas();
     this.getTienda();
   }
 
@@ -62,8 +71,8 @@ class TiendasController {
             .ok('Listo')
         );
         this.getCompras();
-        this.numTarjeta = '';
         this.importe = '';
+        this.newCompra = false;
       })
       .catch(reason => {
         /* Caso de fallo */
@@ -84,6 +93,17 @@ class TiendasController {
       .then(res => {
         this.$log.debug('Response from backend', res);
         this.compras = res.data;
+      })
+      .catch(reason => {
+        this.$log.debug('Fail fetching messages from backend', reason);
+      });
+  }
+
+  getTarjetas() {
+    this.$http.get('http://localhost:8000/api/tarjetas')
+      .then(res => {
+        this.$log.debug('Response from backend', res);
+        this.tarjetas = res.data;
       })
       .catch(reason => {
         this.$log.debug('Fail fetching messages from backend', reason);
@@ -124,10 +144,6 @@ class TiendasController {
 
   success(compras) {
     this.compras = compras;
-  }
-
-  get() {
-    this.promise = this.$nutrition.compras.get(this.query, this.success).$promise;
   }
 
   settings() {

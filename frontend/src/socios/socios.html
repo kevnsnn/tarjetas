@@ -10,7 +10,7 @@
         <span style="margin-top: 10px" class="subtitle"><sup><em>¡Gestiona tus premios!</em></sup></span>
       </div>
       <div layout="row">
-        <span style="margin-top: 10px" class="subtitle"><sup>Socio {{ $ctrl.user }}</sup></span>
+        <span style="margin-top: 10px" class="subtitle"><sup>Socio: {{ $ctrl.user }} | Puntos: {{$ctrl.puntos }}</sup></span>
         <!-- Fab Speed dial -->
         <div style="margin-top: 14px">
           <md-fab-speed-dial class="md-scale" md-direction="left">
@@ -82,28 +82,68 @@
   </div>
   <div layout="column" style="margin-top: 10px" class="box formTarjeta animate-hide" ng-show="$ctrl.isSettings" layout-align="center">
     <h2 class="registroTitle">Modifica tus datos</h2>
-    <!-- Formulario tiendas -->
-    <form ng-submit="$ctrl.modificarTienda()">
-      <div layout="row">
+    <!-- Formulario tarjetas -->
+    <form name="socioForm" ng-submit="socioForm.$valid && $ctrl.modificarTarjeta()">
+    <!-- Formulario tarjetas -->
+    <div layout="row">
       <!-- Input nombre -->
       <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">shop</md-icon>
-        <input style="color: white" ng-disabled="true" ng-model="$ctrl.nombreTienda" type="text" placeholder="Nombre de la tienda" id="phGrey">
+        <md-icon class="material-icons md-light">person</md-icon>        
+        <input ng-disabled="true" style="color: white" ng-model="$ctrl.nombre" name="nombre" type="text" placeholder="Nombre" id="phGrey">
       </md-input-container>
-        <!-- Input primerApellido -->
-        <md-input-container md-no-float class="md-block">
+      <!-- Input primerApellido -->
+      <md-input-container md-no-float class="md-block">
+        <input ng-disabled="true" style="color: white" ng-model="$ctrl.primerApellido" name="primerApellido" type="text" placeholder="Primer apellido" id="phGrey">
+      </md-input-container>
+      <!-- Input segundoApellido -->
+      <md-input-container md-no-float class="md-block">
+        <input ng-disabled="true" style="color: white" ng-model="$ctrl.segundoApellido" name="segundoApellido" type="text" placeholder="Segundo apellido" id="phGrey">
+      </md-input-container>
+    </div>
+    <div layout="row">
+      <!-- Input direccion -->
+      <md-input-container md-no-float class="md-block">
         <md-icon class="material-icons md-light">home</md-icon>
-          <input style="color: white" ng-model="$ctrl.direccionTienda" type="text" placeholder="Dirección" id="phGrey">
-        </md-input-container>
-        <!-- Input segundoApellido -->
-        <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">phone</md-icon>
-          <input style="color: white" ng-model="$ctrl.telefonoTienda" type="text" placeholder="Teléfono" id="phGrey">
-        </md-input-container>
+        <input style="color: white" ng-model="$ctrl.direccion" name="direccion" type="text" placeholder="Dirección" id="phGrey">
+      </md-input-container>                
+      <!-- Input telefono -->
+      <md-input-container md-no-float class="md-block">
+        <md-icon class="material-icons md-light">phone</md-icon>        
+        <input style="color: white" ng-model="$ctrl.telefono" name="telefono" type="text" placeholder="Teléfono" id="phGrey">
+      </md-input-container>
+       <!-- Input email -->
+      <md-input-container md-no-float class="md-block">
+        <md-icon class="material-icons md-light">email</md-icon>        
+        <input ng-disabled="true" style="color: white" ng-model="$ctrl.email" name="email" type="email" placeholder="Email" id="phGrey">
+      </md-input-container>
+    </div>
+    <div layout="row">      
+      <!-- Password -->
+      <md-input-container md-no-float class="md-block">
+        <md-icon class="material-icons md-light">lock</md-icon>
+        <input ng-maxlength="30" ng-minlength="6" type="password" placeholder="Contraseña"
+        ng-model="$ctrl.passwordS" name="passwordS" id="phGrey" ng-pattern="/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/">
+        <!-- Password error messages -->
+        <div ng-messages="socioForm.passwordS.$error">
+          <div ng-message="pattern">Requiere contraseña alfanumérica</div>
+          <div ng-message="maxlength">Máxima longitud de 30 caracteres</div>
+          <div ng-message="minlength">Mínima longitud de 6 caracteres</div>
         </div>
+      </md-input-container>
+      <!-- Confirm Password -->
+      <md-input-container md-no-float class="md-block">
+        <md-icon class="material-icons md-light">security</md-icon>
+        <input match-password="passwordS" type="password" placeholder="Confirme contraseña"
+        ng-model="$ctrl.confirmPasswordS" name="confirmPasswordS" id="phGrey">
+        <!-- Confirm password error messages -->
+        <div ng-messages="socioForm.confirmPasswordS.$error">
+          <div ng-message="passwordMatch">La contraseña no es la misma</div>
+        </div>
+      </md-input-container>
+    </div>
       <!-- Boton submit del formulario -->
-      <md-button type="submit" id="regTienda" class="md-raised md-warn">Modificar</md-button>
-      <md-button type="button" id="elimTienda" ng-click="$ctrl.eliminarCuenta($event)" class="md-warn">Eliminar Cuenta</md-button>      
+      <md-button type="submit" id="modTarjeta" class="md-raised md-warn">Modificar</md-button>
+      <md-button type="button" id="elimTarjeta" ng-click="$ctrl.eliminarCuenta($event)" class="md-warn">Eliminar Cuenta</md-button>      
     </form>
   </div>
 </div>

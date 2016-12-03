@@ -127,3 +127,32 @@
   position: absolute;
   bottom: -800px;
 }
+
+.animate-hide-search-a {
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  opacity: 1;
+  right: 1000px
+}
+
+.animate-hide-search-a.ng-hide {
+  opacity: 0;
+  position: absolute;
+  right: 0px;
+}
+
+.animate-hide-search-b {
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  opacity: 1;
+  right: 0px
+}
+
+.animate-hide-search-b.ng-hide {
+  opacity: 0;
+  position: absolute;
+  right: 1000px;
+}
+
+.xButton {
+  margin-right: -46px;
+  margin-top: -20px;
+}

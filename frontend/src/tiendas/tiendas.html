@@ -10,7 +10,7 @@
         <span style="margin-top: 10px" class="subtitle"><sup><em>¡Gestiona tus compras!</em></sup></span>
       </div>
       <div layout="row">
-        <span style="margin-top: 10px" class="subtitle"><sup>Tienda {{ $ctrl.user }}</sup></span>
+        <span style="margin-top: 10px" class="subtitle"><sup>Tienda: {{ $ctrl.user }}</sup></span>
         <!-- Fab Speed dial -->
         <div style="margin-top: 14px">
           <md-fab-speed-dial class="md-scale" md-direction="left">
@@ -40,28 +40,94 @@
     <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.registrar(0)">Registro de compras</md-button>
     <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.registrar(1)">Historial de compras</md-button>      
   </div>
-  <div layout="column" class="box formTarjeta animate-hide" ng-show="$ctrl.isAction && $ctrl.isRegistro && !$ctrl.isSettings" layout-align="center">
+  <div class="animate-hide" ng-show="$ctrl.isAction && $ctrl.isRegistro && !$ctrl.isSettings && !$ctrl.newCompra" layout="column">
+    <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.isSearchingC || $ctrl.selectedC.length">
+      <form style="max-height: 40px">
+        <md-input-container md-no-float>
+          <input style="min-width: 1050px" ng-model="$ctrl.searchTextC" type="text" placeholder="Buscar...">
+        </md-input-container>
+      </form>
+      <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingC = false">
+        <md-icon class="material-icons" md-colors="{color: 'primary-50'}">undo</md-icon>
+      </md-button>
+    </div>
+    <div ng-hide="$ctrl.isSearchingC || $ctrl.selectedC.length" class="animate-hide-search-a">
+      <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingC = true">
+        <md-icon class="material-icons" md-colors="{color: 'primary-50'}">search</md-icon>
+      </md-button>
+    </div>
+    <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.selectedC.length" style="min-height: 52px">
+      <md-button class="md-raised md-warn md-hue-1" ng-click="$ctrl.newCompra = true; $ctrl.numTarjeta = $ctrl.selectedC[0].numTarjeta">Registrar compra</md-button>
+    </div>
+    <md-table-container>
+      <table id="findTarjetasResult" md-table ng-model="$ctrl.selectedC" md-row-select>
+        <thead md-head md-order="numTarjeta">
+          <tr md-row>
+            <th md-column md-numeric md-order-by="numTarjeta"><span>Número de tarjeta</span></th>
+            <th md-column md-numeric md-order-by="nombre"><span>Nombre</span></th>
+            <th md-column md-numeric md-order-by="primerApellido"><span>Primer apellido</span></th>                                    
+            <th md-column md-numeric md-order-by="segundoApellido"><span>Segundo apellido</span></th>                                    
+            <th md-column md-numeric md-order-by="direccion"><span>Dirección</span></th>                                    
+            <th md-column md-numeric md-order-by="telefono"><span>Teléfono</span></th>                                    
+            <th md-column md-numeric md-order-by="email"><span>email</span></th>                                    
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="tarjeta" md-select-id="_id" md-auto-select
+          ng-repeat="tarjeta in $ctrl.filterTarjetas = ($ctrl.tarjetas | orderBy: numTarjeta | filter: $ctrl.searchTextC) | limitTo: $ctrl.query.limit: ($ctrl.query.page - 1) * $ctrl.query.limit">
+            <td md-cell>{{tarjeta.numTarjeta}}</td>
+            <td md-cell>{{tarjeta.nombre}}</td>
+            <td md-cell>{{tarjeta.primerApellido}}</td>
+            <td md-cell>{{tarjeta.segundoApellido}}</td>
+            <td md-cell>{{tarjeta.direccion}}</td>
+            <td md-cell>{{tarjeta.telefono}}</td>
+            <td md-cell>{{tarjeta.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+    <md-table-pagination md-limit="$ctrl.query.limit" md-limit-options="[5, 10, 15]" md-page="$ctrl.query.page" md-total="{{$ctrl.filterTarjetas.length}}" md-page-select></md-table-pagination>
+  </div>
+  <div layout="column" class="box formTarjeta animate-hide" ng-show="$ctrl.isAction && $ctrl.isRegistro && !$ctrl.isSettings && $ctrl.newCompra" layout-align="center">
+    <div layout="row">
       <h2 class="registroTitle">Registro de compras</h2>
-      <!-- Formulario tarjetas -->
+      <div class="xButton">
+        <md-button class="md-warn md-hue-1" ng-click="$ctrl.newCompra = false">
+          <md-icon class="material-icons" md-colors="{color: 'primary-50'}">clear</md-icon>
+        </md-button>
+      </div>
+    </div>
     <form ng-submit="$ctrl.registrarCompra()">
-      <!-- Input nombreTienda -->
       <md-input-container md-no-float class="md-block">
         <md-icon class="material-icons md-light">credit_card</md-icon>
-        <input style="color: white" ng-model="$ctrl.numTarjeta" type="text" placeholder="Número de tarjeta de socio" id="phGrey">
+        <input ng-disabled="true" style="color: white" ng-model="$ctrl.numTarjeta" type="text" placeholder="Número de tarjeta de socio" id="phGrey">
       </md-input-container>
-      <!-- Input importe -->
       <md-input-container md-no-float class="md-block">
         <md-icon class="material-icons md-light">euro_symbol</md-icon>        
         <input style="color: white" ng-model="$ctrl.importe" type="text" placeholder="Importe de compra" id="phGrey">
       </md-input-container>
-      <!-- Boton submit del formulario -->
       <md-button type="submit" class="md-raised md-warn">Registrar</md-button>
     </form>
   </div>
   <div class="animate-hide" ng-show="$ctrl.isAction && $ctrl.isHistorial && !$ctrl.isSettings" layout="column">
+    <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.isSearchingH">
+      <form style="max-height: 40px">
+        <md-input-container md-no-float>
+          <input style="min-width: 580px" ng-model="$ctrl.searchTextH.numTarjeta" type="text" placeholder="Buscar...">
+        </md-input-container>
+      </form>
+      <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingH = false">
+        <md-icon class="material-icons" md-colors="{color: 'primary-50'}">undo</md-icon>
+      </md-button>
+    </div>
+    <div ng-hide="$ctrl.isSearchingH" class="animate-hide-search-a">
+      <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingH = true">
+        <md-icon class="material-icons" md-colors="{color: 'primary-50'}">search</md-icon>
+      </md-button>
+    </div>
     <md-table-container>
-      <table md-table md-row-select multiple ng-model="$ctrl.selected">
-        <thead md-head md-order="fecha" md-on-reorder="$ctrl.logOrder">
+      <table id="findComprasResult" md-table ng-model="$ctrl.selectedH">
+        <thead md-head md-order="fecha">
           <tr md-row>
             <th md-column md-numeric md-order-by="numTarjeta"><span>Número de tarjeta</span></th>
             <th md-column md-numeric md-desc md-order-by="fecha"><span>Fecha (Mes-día-año @ horas:min::seg)</span></th>                                    
@@ -70,7 +136,7 @@
         </thead>
         <tbody md-body>
           <tr md-row md-select="compra" md-select-id="_id" md-auto-select
-          ng-repeat="compra in $ctrl.compras | orderBy: fecha | limitTo: $ctrl.query.limit: ($ctrl.query.page - 1) * $ctrl.query.limit">
+          ng-repeat="compra in $ctrl.filterCompras = ($ctrl.compras | orderBy: fecha | filter: $ctrl.searchTextH) | limitTo: $ctrl.query.limit: ($ctrl.query.page - 1) * $ctrl.query.limit">
             <td md-cell>{{compra.numTarjeta}}</td>
             <td md-cell>{{compra.fecha | date:'MMM-dd-yyyy @ HH:mm::ss'}}</td>                        
             <td md-cell>{{compra.importe}}</td>
@@ -78,7 +144,7 @@
         </tbody>
       </table>
     </md-table-container>
-    <md-table-pagination md-limit="$ctrl.query.limit" md-limit-options="[5, 10, 15]" md-page="$ctrl.query.page" md-total="{{$ctrl.compras.length}}" md-page-select></md-table-pagination>
+    <md-table-pagination md-limit="$ctrl.query.limit" md-limit-options="[5, 10, 15]" md-page="$ctrl.query.page" md-total="{{$ctrl.filterCompras.length}}" md-page-select></md-table-pagination>
   </div>
   <div layout="column" style="margin-top: 10px" class="box formTarjeta animate-hide" ng-show="$ctrl.isSettings" layout-align="center">
     <h2 class="registroTitle">Modifica tus datos</h2>

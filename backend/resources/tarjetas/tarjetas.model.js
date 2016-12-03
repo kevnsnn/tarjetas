@@ -64,6 +64,10 @@ TarjetaSchema.statics = {
   findTarjeta(numTarjeta) {
     return this.findOne({ numTarjeta: numTarjeta });
   },
+  /* Busca los datos de numTarjeta */
+  findByEmail(email) {
+    return this.findOne({ email: email });
+  },
   findByCredentials(email, password) {
     return this.findOne({email: email, password: password}).select('-password');
   }

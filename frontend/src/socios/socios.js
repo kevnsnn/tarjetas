@@ -29,8 +29,7 @@ class SociosController {
       page: 1
     };
     this.promise = null;
-    this.getCompras();
-    this.getSocio();
+    this.getTarjeta();
   }
 
   registrar(tipo) {
@@ -79,33 +78,32 @@ class SociosController {
       });
   }
 
-  getCompras() {
-    this.$http.get('http://localhost:8000/api/compras')
-      .then(res => {
-        this.$log.debug('Response from backend', res);
-        this.compras = res.data;
-      })
-      .catch(reason => {
-        this.$log.debug('Fail fetching messages from backend', reason);
-      });
-  }
-
-  getSocio() {
+  getTarjeta() {
     this.$http.get(`http://localhost:8000/api/tarjetas/${this.user}`)
       .then(res => {
         this.$log.debug('Response from backend', res);
         this.socio = res.data;
-        this.nombreTienda = this.tienda.nombreTienda;
-        this.direccionTienda = this.tienda.direccion;
-        this.telefonoTienda = this.tienda.telefono;
+        this.nombre = this.socio.nombre;
+        this.primerApellido = this.socio.primerApellido;
+        this.segundoApellido = this.socio.segundoApellido;
+        this.direccion = this.socio.direccion;
+        this.telefono = this.socio.telefono;
+        this.email = this.socio.email;
+        this.numTarjeta = this.socio.numTarjeta;
+        this.puntos = this.socio.puntos;
       })
       .catch(reason => {
-        this.$log.debug('Fail fetching messages from backend', reason);
+        this.$log.debug('Fallo obteniendo datos de socio de backend', reason);
       });
   }
 
-  modificarTienda() {
-    this.$http.put(`http://localhost:8000/api/tiendas/${this.user}`, {direccion: this.direccionTienda, telefono: this.telefonoTienda})
+  modificarTarjeta() {
+    if (this.passwordS) {
+      this.modificaciones = {direccion: this.direccion, telefono: this.telefono, password: this.passwordS};
+    } else {
+      this.modificaciones = {direccion: this.direccion, telefono: this.telefono};
+    }
+    this.$http.put(`http://localhost:8000/api/tarjetas/${this.numTarjeta}`, this.modificaciones)
       .then(res => {
         this.$log.debug('Response from backend', res);
         this.$mdDialog.show(
@@ -120,6 +118,8 @@ class SociosController {
       .catch(reason => {
         this.$log.debug('Fail fetching messages from backend', reason);
       });
+    this.passwordS = '';
+    this.confirmPasswordS = '';
   }
 
   success(compras) {
@@ -149,7 +149,7 @@ class SociosController {
       .cancel('Cancelar');
 
     this.$mdDialog.show(confirm).then(() => {
-      this.$http.delete(`http://localhost:8000/api/tiendas/${this.user}`)
+      this.$http.delete(`http://localhost:8000/api/tarjetas/${this.numTarjeta}`)
       .then(res => {
         this.$log.debug('Response from backend', res);
         const alert = this.$mdDialog.alert()
