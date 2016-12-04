@@ -13,7 +13,7 @@ function login(req, res, next) {
           const payload = {
             sub: user,
             iat: moment().unix(),
-            exp: moment().add(12, "hours").unix(),
+            exp: moment().add(3, "hours").unix(),
           }
         let token = jwt.encode(payload, config.secret, 'HS256');
         res.status(200).json(token);
