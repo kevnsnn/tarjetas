@@ -170,45 +170,52 @@ function create(req, res, next) {
 
 /* put: Control actualizaciones de datos compra */
 function modify(req, res, next) {
-  /* Llamada a consulta del modelo */
-  Compra.update(req.params.id, req.body)
-    .then(oldCompra => {
-      /* Caso de exito */
-      if (oldCompra) {
-        /* Caso actualizacion de datos correcta */
-        /* Actualizacion de los puntos de la tarjeta que figura en la compra modificada */
-        accumulate(oldCompra.numTarjeta).then(isAccumulated => {
-          if (isAccumulated) {
-            if (req.body.numTarjeta && req.body.numTarjeta !== oldCompra.numTarjeta) {
-              /* Si la modificacion provoca cambio de puntos de otra tarjeta -> actualizar esa otra tarjeta */                  
-              accumulate(req.body.numTarjeta).then(isOtherAccumulated => {
-                if (isOtherAccumulated) {
-                   /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
-                  res.status(201).json({ status: 0, msg: 'Compra y puntos modificados' });
+  verifyTarjeta(req.body.numTarjeta).then(verifiedTarjeta => {
+    if (verifiedTarjeta) {
+      /* Llamada a consulta del modelo */
+      Compra.update(req.params.id, req.body)
+        .then(oldCompra => {
+          /* Caso de exito */
+          if (oldCompra) {
+            /* Caso actualizacion de datos correcta */
+            /* Actualizacion de los puntos de la tarjeta que figura en la compra modificada */
+            accumulate(oldCompra.numTarjeta).then(isAccumulated => {
+              if (isAccumulated) {
+                if (req.body.numTarjeta && req.body.numTarjeta !== oldCompra.numTarjeta) {
+                  /* Si la modificacion provoca cambio de puntos de otra tarjeta -> actualizar esa otra tarjeta */                  
+                  accumulate(req.body.numTarjeta).then(isOtherAccumulated => {
+                    if (isOtherAccumulated) {
+                       /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
+                      res.status(200).json({ status: 0, msg: 'Compra y puntos modificados' });
+                    } else {
+                    /* Status: Compra correcta y acumulacion de puntos fallida + codigo: 201 + mensaje */
+                    res.status(200).json({ status: 2, msg: 'Compra modificada pero puntos de antigua tarjeta no modificada' });
+                    }   
+                  });
                 } else {
-                /* Status: Compra correcta y acumulacion de puntos fallida + codigo: 201 + mensaje */
-                res.status(201).json({ status: 1, msg: 'Compra modificada pero puntos de antigua tarjeta no modificada' });
-                }   
-              });
-            } else {
-              /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
-              res.status(201).json({ status: 0, msg: 'Compra y puntos modificados' });
-            }
+                  /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
+                  res.status(200).json({ status: 0, msg: 'Compra y puntos modificados' });
+                }
+              } else {
+                /* Status: Compra correcta, fallo en puntos + codigo: 201 + mensaje */                
+                res.status(200).json({ status: 1, msg: 'Compra modificada pero puntos no modificados' });
+              }
+            });   
           } else {
-            /* Status: Compra correcta, fallo en puntos + codigo: 201 + mensaje */                
-            res.status(201).json({ status: 0, msg: 'Compra modificada pero puntos no modificados' });            
+            /* Caso de actualizacion fallida por compra no encontrada */
+            res.status(404).json({ msg: 'Compra a modificar no encontrada' }); /* Codigo: 404 + mensaje de fallo */ 
           }
-        });   
-      } else {
-        /* Caso de actualizacion fallida por compra no encontrada */
-        res.status(404).json({ msg: 'Compra a modificar no encontrada' }); /* Codigo: 404 + mensaje de fallo */ 
-      }
-    })
-    .catch(reason => {
-      /* Caso de fallo */
-      console.log('Error modificando compra: ', reason);
-      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
-    });
+        })
+        .catch(reason => {
+          /* Caso de fallo */
+          console.log('Error modificando compra: ', reason);
+          res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
+        });
+    } else {
+      /* Status: Compra correcta, fallo en puntos + codigo: 201 + mensaje */                
+      res.status(404).json({ msg: 'Número de tarjeta no encontrada' });       
+    }
+  });
 }
 
 /* delete: Control borrado de datos tarjetas */

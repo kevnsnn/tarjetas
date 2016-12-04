@@ -14,11 +14,9 @@ class TiendasController {
     this.isSettings = false;
     this.$document = $document;
     this.icon = './images/icon.png';
-    this.isAction = false;
-    this.isSerchingH = false;
-    this.isSerchingC = false;
     this.isRegistro = false;
     this.newCompra = false;
+    this.modCompra = false;
     this.isHistorial = false;
     this.tienda = null;
     this.compras = [];
@@ -28,7 +26,7 @@ class TiendasController {
     this.query = {
       filter: '',
       order: '_id',
-      limit: 5,
+      limit: 10,
       page: 1
     };
     this.filter = {
@@ -112,7 +110,7 @@ class TiendasController {
       });
   }
 
-  modificarTienda() {
+  modifyTienda() {
     if (this.password) {
       this.modificaciones = {direccion: this.direccionTienda, telefono: this.telefonoTienda, password: this.password};
     } else {
@@ -132,6 +130,38 @@ class TiendasController {
       })
       .catch(reason => {
         this.$log.debug('Fail fetching messages from backend', reason);
+      });
+    this.password = '';
+    this.confirmPassword = '';
+  }
+
+  modifyCompra() {
+    this.compraMod = this.compras.find(() => {
+      return this.numTarjetaMod;
+    });
+    this.$http.put(`http://localhost:8000/api/compras/${this.compraMod._id}`, {numTarjeta: this.numTarjetaMod, importe: this.importeMod})
+      .then(res => {
+        this.$log.debug('Response from backend', res);
+        this.$mdDialog.show(
+          this.$mdDialog.alert()
+            .parent(angular.element(this.$document.body))
+            .clickOutsideToClose(true)
+            .title('Modificaciones')
+            .textContent('¡Modificaciones realizadas con éxito!')
+            .ok('Listo')
+        );
+        this.getCompras();
+      })
+      .catch(reason => {
+        this.$log.debug('Fallo modificando compra del backend', reason);
+        this.$mdDialog.show(
+          this.$mdDialog.alert()
+            .parent(angular.element(this.$document.body))
+            .clickOutsideToClose(true)
+            .title('Fallo Modificaciones')
+            .textContent('¡Número de tarjeta inválido!')
+            .ok('Corregir')
+        );
       });
     this.password = '';
     this.confirmPassword = '';

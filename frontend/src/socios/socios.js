@@ -58,7 +58,7 @@ class SociosController {
       });
   }
 
-  modificarTarjeta() {
+  modifyTarjeta() {
     if (this.password) {
       this.modificaciones = {direccion: this.direccion, telefono: this.telefono, password: this.password};
     } else {
