@@ -125,27 +125,27 @@
       </md-button>
     </div>
     <div layout="column">
-    <md-table-container style="overflow: inherit">
-      <table id="findComprasResult" md-table ng-model="$ctrl.selectedH" md-row-select>
-        <thead md-head md-order="fecha">
-          <tr md-row>
-            <th md-column md-numeric md-order-by="numTarjeta"><span>Número de tarjeta</span></th>
-            <th md-column md-numeric md-desc md-order-by="fecha"><span>Fecha (Mes-día-año @ horas:min::seg)</span></th>                                    
-            <th md-column md-numeric md-order-by="importe"><span>Importe (€)</span></th>
-          </tr>
-        </thead>
-        <tbody md-body>
-          <tr md-row md-select="compra" md-select-id="_id" md-auto-select
-          ng-repeat="compra in $ctrl.filterCompras = ($ctrl.compras | orderBy: fecha | filter: $ctrl.searchTextH) | limitTo: $ctrl.query.limit: ($ctrl.query.page - 1) * $ctrl.query.limit">
-            <td md-cell>{{compra.numTarjeta}}</td>
-            <td md-cell>{{compra.fecha | date:'MMM-dd-yyyy @ HH:mm::ss'}}</td>                        
-            <td md-cell>{{compra.importe}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <md-table-container style="overflow: inherit">
+        <table id="findComprasResult" md-table ng-model="$ctrl.selectedH" md-row-select>
+          <thead md-head md-order="fecha">
+            <tr md-row>
+              <th md-column md-numeric md-order-by="numTarjeta"><span>Número de tarjeta</span></th>
+              <th md-column md-numeric md-desc md-order-by="fecha"><span>Fecha (Mes-día-año @ horas:min::seg)</span></th>                                    
+              <th md-column md-numeric md-order-by="importe"><span>Importe (€)</span></th>
+            </tr>
+          </thead>
+          <tbody md-body>
+            <tr md-row md-select="compra" md-select-id="_id" md-auto-select
+            ng-repeat="compra in $ctrl.filterCompras = ($ctrl.compras | orderBy: fecha | filter: $ctrl.searchTextH) | limitTo: $ctrl.query.limit: ($ctrl.query.page - 1) * $ctrl.query.limit">
+              <td md-cell>{{compra.numTarjeta}}</td>
+              <td md-cell>{{compra.fecha | date:'MMM-dd-yyyy @ HH:mm::ss'}}</td>                        
+              <td md-cell>{{compra.importe}}</td>
+            </tr>
+          </tbody>
+        </table>
     </md-table-container>
     <md-table-pagination md-limit="$ctrl.query.limit" md-page="$ctrl.query.page" md-total="{{$ctrl.filterCompras.length}}" md-page-select></md-table-pagination>    
-    </div>    
+    </div>
   </div>
   <div layout="column" class="box formTarjeta animate-hide" ng-hide="!$ctrl.modCompra || $ctrl.isRegistro" layout-align="center">
     <div layout="row">

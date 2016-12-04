@@ -36,52 +36,38 @@
       </div>
     </div>
   </md-toolbar>
-  <div layout="row" layout-align="center center" class="animate-hide" ng-hide="$ctrl.isSettings">
-    <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.registrar(0)">Registro de compras</md-button>
-    <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.registrar(1)">Historial de compras</md-button>      
-  </div>
-  <div layout="column" class="box formTarjeta animate-hide" ng-show="$ctrl.isAction && $ctrl.isRegistro && !$ctrl.isSettings" layout-align="center">
-      <h2 class="registroTitle">Registro de compras</h2>
-      <!-- Formulario tarjetas -->
-    <form ng-submit="$ctrl.registrarCompra()">
-      <!-- Input nombreTienda -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">credit_card</md-icon>
-        <input style="color: white" ng-model="$ctrl.numTarjeta" type="text" placeholder="Número de tarjeta de socio" id="phGrey">
-      </md-input-container>
-      <!-- Input importe -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">euro_symbol</md-icon>        
-        <input style="color: white" ng-model="$ctrl.importe" type="text" placeholder="Importe de compra" id="phGrey">
-      </md-input-container>
-      <!-- Boton submit del formulario -->
-      <md-button type="submit" class="md-raised md-warn">Registrar</md-button>
-    </form>
-  </div>
-  <div class="animate-hide" ng-show="$ctrl.isAction && $ctrl.isHistorial && !$ctrl.isSettings" layout="column">
-    <md-table-container>
-      <table md-table md-row-select multiple ng-model="$ctrl.selected">
-        <thead md-head md-order="fecha" md-on-reorder="$ctrl.logOrder">
+  <div class="animate-hide" layout="column" layout-align="center" ng-hide="$ctrl.isSettings">
+    <h2 style="color: teal">Tiendas con las que puede sumar puntos</h2>
+    <md-table-container style="overflow: inherit">
+      <table id="findTiendasResult" md-table ng-model="$ctrl.selected">
+        <thead md-head md-order="nombreTienda">
           <tr md-row>
-            <th md-column md-numeric md-order-by="numTarjeta"><span>Número de tarjeta</span></th>
-            <th md-column md-numeric md-desc md-order-by="fecha"><span>Fecha (Mes-día-año @ horas:min::seg)</span></th>                                    
-            <th md-column md-numeric md-order-by="importe"><span>Importe (€)</span></th>
+            <th md-column md-numeric md-order-by="nombreTienda"><span>Tienda</span></th>
+            <th md-column md-numeric md-desc md-order-by="direccion"><span>Dirección</span></th>                                    
+            <th md-column md-numeric md-order-by="telefono"><span>Teléfono</span></th>
           </tr>
         </thead>
         <tbody md-body>
-          <tr md-row md-select="compra" md-select-id="_id" md-auto-select
-          ng-repeat="compra in $ctrl.compras | orderBy: fecha | limitTo: $ctrl.query.limit: ($ctrl.query.page - 1) * $ctrl.query.limit">
-            <td md-cell>{{compra.numTarjeta}}</td>
-            <td md-cell>{{compra.fecha | date:'MMM-dd-yyyy @ HH:mm::ss'}}</td>                        
-            <td md-cell>{{compra.importe}}</td>
+          <tr md-row md-select="tienda" md-select-id="_id" md-auto-select
+          ng-repeat="tienda in $ctrl.filterTiendas = ($ctrl.tiendas | orderBy: fecha | filter: $ctrl.searchText) | limitTo: $ctrl.query.limit: ($ctrl.query.page - 1) * $ctrl.query.limit">
+            <td md-cell>{{tienda.nombreTienda}}</td>
+            <td md-cell>{{tienda.direccion}}</td>                        
+            <td md-cell>{{tienda.telefono}}</td>
           </tr>
         </tbody>
       </table>
     </md-table-container>
-    <md-table-pagination md-limit="$ctrl.query.limit" md-limit-options="[5, 10, 15]" md-page="$ctrl.query.page" md-total="{{$ctrl.compras.length}}" md-page-select></md-table-pagination>
-  </div>
-  <div layout="column" style="margin-top: 10px" class="box formTarjeta animate-hide" ng-show="$ctrl.isSettings" layout-align="center">
-    <h2 class="registroTitle">Modifica tus datos</h2>
+    <md-table-pagination md-limit="$ctrl.query.limit" md-page="$ctrl.query.page" md-total="{{$ctrl.filterTiendas.length}}" md-page-select></md-table-pagination>    
+    </div>
+  <div layout="column" style="margin-top: 10px" class="box formTarjeta animate-hide" ng-hide="!$ctrl.isSettings" layout-align="center">
+    <div layout="row" layout-align="space-between">    
+      <h2 class="registroTitle">Modifica tus datos</h2>
+      <div class="xButton">
+        <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.isSettings = !$ctrl.isSettings">
+          <md-icon class="material-icons" md-colors="{color: 'primary-50'}">clear</md-icon>
+        </md-button>
+      </div>
+    </div>
     <!-- Formulario tarjetas -->
     <form name="socioForm" ng-submit="socioForm.$valid && $ctrl.modifyTarjeta()">
     <!-- Formulario tarjetas -->
@@ -146,4 +132,5 @@
       <md-button type="button" id="elimTarjeta" ng-click="$ctrl.deleteCuenta($event)" class="md-warn">Eliminar Cuenta</md-button>      
     </form>
   </div>
+  
 </div>

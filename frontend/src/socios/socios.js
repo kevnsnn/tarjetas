@@ -14,29 +14,16 @@ class SociosController {
     this.isSettings = false;
     this.$document = $document;
     this.icon = './images/icon.png';
-    this.isAction = false;
-    this.isRegistro = false;
-    this.isHistorial = false;
     this.socio = null;
+    this.tiendas = [];
     this.selected = [];
     this.query = {
       order: '_id',
-      limit: 5,
+      limit: 10,
       page: 1
     };
     this.getTarjeta();
-  }
-
-  registrar(tipo) {
-    this.isAction = true;
-    if (tipo === 0) {
-      this.isRegistro = true;
-      this.isHistorial = false;
-    }
-    if (tipo === 1) {
-      this.isHistorial = true;
-      this.isRegistro = false;
-    }
+    this.getTiendas();
   }
 
   getTarjeta() {
@@ -52,6 +39,17 @@ class SociosController {
         this.email = this.socio.email;
         this.numTarjeta = this.socio.numTarjeta;
         this.puntos = this.socio.puntos;
+      })
+      .catch(reason => {
+        this.$log.debug('Fallo obteniendo datos de socio de backend', reason);
+      });
+  }
+
+  getTiendas() {
+    this.$http.get(`http://localhost:8000/api/tiendas`)
+      .then(res => {
+        this.$log.debug('Response from backend', res);
+        this.tiendas = res.data;
       })
       .catch(reason => {
         this.$log.debug('Fallo obteniendo datos de socio de backend', reason);
