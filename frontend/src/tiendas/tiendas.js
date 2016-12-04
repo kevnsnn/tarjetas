@@ -59,7 +59,9 @@ class TiendasController {
         );
         this.getCompras();
         this.importe = '';
-        this.newCompra = false;
+        this.newCompra = !this.newCompra;
+        this.isRegistro = !this.isRegistro;
+        this.selectedC = [];
       })
       .catch(reason => {
         /* Caso de fallo */

@@ -25,10 +25,10 @@
                 <md-icon class="material-icons" md-colors="{color: 'primary-50'}">exit_to_app</md-icon>
               </md-button>
               <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="!$ctrl.isSettings" ng-click="$ctrl.isSettings = true;
-              $ctrl.isRegistro = false; $ctrl.newCompra = false; $ctrl.newOpCompra = false; $ctrl.isHistorial = false">
+              $ctrl.isRegistro = false; $ctrl.newCompra = false; $ctrl.isHistorial = false">
                 <md-icon class="material-icons" md-colors="{color: 'primary-50'}">settings</md-icon>
               </md-button>
-              <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="$ctrl.isSettings" ng-click="$ctrl.isSettings = false;">
+              <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="$ctrl.isSettings" ng-click="$ctrl.isSettings = !$ctrl.isSettings">
                 <md-icon class="material-icons" md-colors="{color: 'primary-50'}">shop</md-icon>
               </md-button>
             </md-fab-actions>
@@ -38,27 +38,30 @@
     </div>
   </md-toolbar>
   <div layout="row" layout-align="center center" class="animate-hide" ng-hide="$ctrl.isSettings">
-    <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.isRegistro = true; $ctrl.isHistorial = false">Registro de compras</md-button>
-    <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.isHistorial = true; $ctrl.isRegistro = false">Historial de compras</md-button>      
+    <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.isRegistro = !$ctrl.isRegistro;
+    $ctrl.isHistorial = false">Registro de compras</md-button>
+    <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.isHistorial = !$ctrl.isHistorial;
+    $ctrl.isRegistro = false">Historial de compras</md-button>      
   </div>
-  <div class="animate-hide" ng-hide="!$ctrl.isRegistro" layout="column">
+  <div class="animate-hide" ng-hide="!$ctrl.isRegistro || $ctrl.newCompra" layout="column">
     <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.isSearchingC || $ctrl.selectedC.length">
-      <form style="max-height: 40px">
+      <form style="max-height: 52px; min-height: 52px">
         <md-input-container md-no-float>
           <input style="min-width: 1050px" ng-model="$ctrl.searchTextC" type="text" placeholder="Buscar...">
         </md-input-container>
       </form>
-      <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingC = false">
-        <md-icon class="material-icons" md-colors="{color: 'primary-50'}">undo</md-icon>
+      <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.isSearchingC = !$ctrl.isSearchingC">
+        <md-icon class="material-icons">undo</md-icon>
       </md-button>
     </div>
     <div ng-hide="$ctrl.isSearchingC || $ctrl.selectedC.length" class="animate-hide-search-a">
-      <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingC = true">
+      <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingC = !$ctrl.isSearchingC">
         <md-icon class="material-icons" md-colors="{color: 'primary-50'}">search</md-icon>
       </md-button>
     </div>
     <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.selectedC.length" style="min-height: 52px">
-      <md-button class="md-raised md-warn md-hue-1" ng-click="$ctrl.newCompra = true; $ctrl.isRegistro = false; $ctrl.numTarjeta = $ctrl.selectedC[0].numTarjeta">Registrar compra</md-button>
+      <md-button class="md-raised md-warn md-hue-1" ng-click="$ctrl.newCompra = !$ctrl.newCompra;
+      $ctrl.numTarjeta = $ctrl.selectedC[0].numTarjeta">Registrar compra</md-button>
     </div>
     <md-table-container>
       <table id="findTarjetasResult" md-table ng-model="$ctrl.selectedC" md-row-select>
@@ -89,11 +92,11 @@
     </md-table-container>
     <md-table-pagination md-limit="$ctrl.query.limit" md-limit-options="[5, 10, 15]" md-page="$ctrl.query.page" md-total="{{$ctrl.filterTarjetas.length}}" md-page-select></md-table-pagination>
   </div>
-  <div layout="column" class="box formTarjeta animate-hide" ng-hide="!$ctrl.newCompra" layout-align="center">
+  <div layout="column" class="box formTarjeta animate-hide" ng-hide="!$ctrl.newCompra || $ctrl.isHistorial" layout-align="center">
     <div layout="row">
       <h2 class="registroTitle">Registro de compras</h2>
       <div class="xButton">
-        <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.newCompra = false; $ctrl.isRegistro = true">
+        <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.newCompra = !$ctrl.newCompra">
           <md-icon class="material-icons" md-colors="{color: 'primary-50'}">clear</md-icon>
         </md-button>
       </div>
@@ -112,25 +115,25 @@
   </div>
   <div class="animate-hide" ng-hide="!$ctrl.isHistorial" layout="column">
     <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.isSearchingH || $ctrl.selectedH.length">
-      <form style="max-height: 40px">
+      <form style="max-height: 52px; min-height: 52px">
         <md-input-container md-no-float>
           <input style="min-width: 580px" ng-model="$ctrl.searchTextH.numTarjeta" type="text" placeholder="Buscar...">
         </md-input-container>
       </form>
-      <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingH = false">
-        <md-icon class="material-icons" md-colors="{color: 'primary-50'}">undo</md-icon>
+      <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.isSearchingH = !$ctrl.isSearchingH">
+        <md-icon class="material-icons">undo</md-icon>
       </md-button>
     </div>
     <div ng-hide="$ctrl.isSearchingH || $ctrl.selectedH.length" class="animate-hide-search-a">
-      <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingH = true">
+      <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingH = !$ctrl.isSearchingH">
         <md-icon class="material-icons" md-colors="{color: 'primary-50'}">search</md-icon>
       </md-button>
     </div>
     <div layout="row" layout-align="end" class="animate-hide-search-b" ng-hide="!$ctrl.selectedH.length" style="min-height: 52px">
-      <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.modCompra = true">
+      <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.modCompra = !$ctrl.modCompra">
         <md-icon class="material-icons">edit</md-icon>        
       </md-button>
-      <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.deleteCompra = true">
+      <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.deleteCompra = !$ctrl.deleteCompra">
         <md-icon class="material-icons">delete</md-icon>        
       </md-button>
     </div>
@@ -159,7 +162,7 @@
     <div layout="row" layout-align="space-between">    
       <h2 class="registroTitle">Modifica tus datos</h2>
       <div class="xButton">
-        <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.newCompra = false; $ctrl.isRegistro = true">
+        <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.isSettings = !$ctrl.isSettings">
           <md-icon class="material-icons" md-colors="{color: 'primary-50'}">clear</md-icon>
         </md-button>
       </div>
