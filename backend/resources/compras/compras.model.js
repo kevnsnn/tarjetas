@@ -33,6 +33,10 @@ CompraSchema.statics = {
   list() {
     return this.find({ });
   },
+  /* get: consulta todas las Compras en DB */
+  listByTienda(nombreTienda) {
+    return this.find({ nombreTienda: nombreTienda });
+  },
   /* get: consulta todas las Compras en DB por numTarjeta*/
   listByNumTarjeta(numTarjeta) {
     return this.find({ numTarjeta: numTarjeta });

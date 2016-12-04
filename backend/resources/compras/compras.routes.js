@@ -9,11 +9,13 @@ const router = express.Router();
 
 /* Rutas */
 router.route('/')
-  .get(comprasCtrl.list)       /* get: consulta datos sin filtros */
-  .post(comprasCtrl.create)    /* post: registro datos */
+  .get(comprasCtrl.list)          /* get: consulta datos sin filtros */
+  .post(comprasCtrl.create)       /* post: registro datos */
+router.route('/:nombreTienda')
+  .get(comprasCtrl.listByTienda)  /* get: consulta datos por nombre de tienda */
 router.route('/:id')
-  .put(comprasCtrl.modify)     /* put: actualizacion datos de compra */
-  .delete(comprasCtrl.remove); /* delete: eliminacion datos de compra */
+  .put(comprasCtrl.modify)        /* put: actualizacion datos de compra */
+  .delete(comprasCtrl.remove);    /* delete: eliminacion datos de compra */
 
 /* Exportacion enrutamiento */
 export default router;

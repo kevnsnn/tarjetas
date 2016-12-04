@@ -36,15 +36,15 @@ class TiendasController {
         debounce: 500
       }
     };
+    this.getTienda();
     this.getCompras();
     this.getTarjetas();
-    this.getTienda();
   }
 
   /* Funcion que se encarga de realizar el post de tarjetas */
   registrarCompra() {
     /* Ejecucion de post */
-    this.$http.post('http://localhost:8000/api/compras', {nombreTienda: 'Zara', numTarjeta: this.numTarjeta,
+    this.$http.post('http://localhost:8000/api/compras', {nombreTienda: this.nombreTienda, numTarjeta: this.numTarjeta,
       importe: this.importe})
       .then(res => {
         /* Caso de exito */
@@ -60,7 +60,6 @@ class TiendasController {
         this.getCompras();
         this.importe = '';
         this.newCompra = !this.newCompra;
-        this.isRegistro = !this.isRegistro;
         this.selectedC = [];
       })
       .catch(reason => {
@@ -78,7 +77,7 @@ class TiendasController {
   }
 
   getCompras() {
-    this.$http.get('http://localhost:8000/api/compras')
+    this.$http.get(`http://localhost:8000/api/compras/${this.user}`)
       .then(res => {
         this.$log.debug('Response from backend', res);
         this.compras = res.data;
@@ -138,13 +137,36 @@ class TiendasController {
     this.confirmPassword = '';
   }
 
-  exit() {
-    this.$auth.logout();
-    this.$state.go('accesos');
-    this.$window.location.reload();
+  deleteCompra(ev) {
+    const confirm = this.$mdDialog.confirm()
+      .title('¿Está seguro de que quiere eliminar esta compra?')
+      .textContent('Los puntos del socio asociado a esta compra se recalcularán.')
+      .targetEvent(ev)
+      .ok('Eliminar')
+      .cancel('Cancelar');
+
+    this.$mdDialog.show(confirm).then(() => {
+      this.$http.delete(`http://localhost:8000/api/compras/${this.selectedH[0]._id}`)
+      .then(res => {
+        this.$log.debug('Response from backend', res);
+        const alert = this.$mdDialog.alert()
+          .parent(angular.element(this.$document.body))
+          .clickOutsideToClose(true)
+          .title('Compra eliminada correctamente')
+          .textContent('Puntos recalculados')
+          .ok('Listo');
+
+        this.$mdDialog.show(alert).then(() => {
+          this.getCompras();
+        });
+      })
+      .catch(reason => {
+        this.$log.debug('Fallo eliminando compra del backend', reason);
+      });
+    });
   }
 
-  eliminarCuenta(ev) {
+  deleteCuenta(ev) {
     const confirm = this.$mdDialog.confirm()
       .title('¿Está seguro de que quiere eliminar su cuenta?')
       .textContent('Todos sus datos se eliminarán.')
@@ -171,6 +193,12 @@ class TiendasController {
         this.$log.debug('Fail fetching messages from backend', reason);
       });
     });
+  }
+
+  exit() {
+    this.$auth.logout();
+    this.$state.go('accesos');
+    this.$window.location.reload();
   }
 }
 

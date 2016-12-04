@@ -59,7 +59,7 @@
         <md-icon class="material-icons" md-colors="{color: 'primary-50'}">search</md-icon>
       </md-button>
     </div>
-    <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.selectedC.length" style="min-height: 52px">
+    <div layout="row" layout-align="end" class="animate-hide-search-b" ng-hide="!$ctrl.selectedC.length" style="min-height: 52px">
       <md-button class="md-raised md-warn md-hue-1" ng-click="$ctrl.newCompra = !$ctrl.newCompra;
       $ctrl.numTarjeta = $ctrl.selectedC[0].numTarjeta">Registrar compra</md-button>
     </div>
@@ -133,7 +133,7 @@
       <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.modCompra = !$ctrl.modCompra">
         <md-icon class="material-icons">edit</md-icon>        
       </md-button>
-      <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.deleteCompra = !$ctrl.deleteCompra">
+      <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.deleteCompra($event)">
         <md-icon class="material-icons">delete</md-icon>        
       </md-button>
     </div>
@@ -212,7 +212,7 @@
     </div>
       <!-- Boton submit del formulario -->
       <md-button type="submit" id="regTienda" class="md-raised md-warn">Modificar</md-button>
-      <md-button type="button" id="elimTienda" ng-click="$ctrl.eliminarCuenta($event)" class="md-warn">Eliminar Cuenta</md-button>      
+      <md-button type="button" id="elimTienda" ng-click="$ctrl.deleteCuenta($event)" class="md-warn">Eliminar Cuenta</md-button>      
     </form>
   </div>
 </div>

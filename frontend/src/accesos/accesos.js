@@ -17,18 +17,6 @@ class AccesosController {
     this.isTienda = false;
   }
 
-  registrar(tipo) {
-    this.isRegistro = true;
-    if (tipo === 0) {
-      this.isSocio = true;
-      this.isTienda = false;
-    }
-    if (tipo === 1) {
-      this.isTienda = true;
-      this.isSocio = false;
-    }
-  }
-
   /* Funcion que se encarga de realizar el post de tarjetas */
   registrarTarjeta() {
     /* Ejecucion de post */
@@ -109,24 +97,20 @@ class AccesosController {
     this.$log.debug('Logueando');
     this.$auth.login({email: this.usuario, password: this.password})
      .then(res => {
-       this.$log.debug('1');
        this.$auth.setToken(res.data);
        localStorage.setItem('user', this.usuario);
        localStorage.setItem('type', 'socio');
        this.$state.go('socios');
      })
      .catch(() => {
-       this.$log.debug('2');
        this.$auth.login({nombreTienda: this.usuario, password: this.password})
         .then(res => {
-          this.$log.debug('3');
           this.$auth.setToken(res.data);
           localStorage.setItem('user', this.usuario);
           localStorage.setItem('type', 'tienda');
           this.$state.go('tiendas');
         })
         .catch(reason => {
-          this.$log.debug('4');
           this.$log.debug('Login: Fail login user from backend', reason);
           this.$window.alert("Incorrect username or password");
           this.usuario = '';

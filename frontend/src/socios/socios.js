@@ -83,13 +83,7 @@ class SociosController {
     this.confirmPassword = '';
   }
 
-  exit() {
-    this.$auth.logout();
-    this.$state.go('accesos');
-    this.$window.location.reload();
-  }
-
-  eliminarCuenta(ev) {
+  deleteCuenta(ev) {
     const confirm = this.$mdDialog.confirm()
       .title('¿Está seguro de que quiere eliminar su cuenta?')
       .textContent('Todos sus datos se eliminarán.')
@@ -116,6 +110,12 @@ class SociosController {
         this.$log.debug('Fail fetching messages from backend', reason);
       });
     });
+  }
+
+  exit() {
+    this.$auth.logout();
+    this.$state.go('accesos');
+    this.$window.location.reload();
   }
 }
 

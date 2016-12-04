@@ -40,13 +40,16 @@
     </div>
   </md-toolbar>
   <div layout="row" layout-align="center center">
-    <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.registrar(0)">Registro de socios</md-button>
-    <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.registrar(1)">Registro de tiendas</md-button>      
+    <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.isSocios = !$ctrl.isSocios;
+    $ctrl.isTiendas = false">Registro de socios</md-button>
+    <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.isTiendas = !$ctrl.isTiendas;
+    $ctrl.isSocios = false">Registro de tiendas</md-button>      
   </div>
-  <div layout="column" class="box formTarjeta animate-hide" ng-show="$ctrl.isRegistro && $ctrl.isSocio" layout-align="center">
+  <div layout="column" class="box formTarjeta animate-hide" ng-hide="!$ctrl.isSocios" layout-align="center">
     <h2 class="registroTitle">Registro de Socios</h2>
     <!-- Formulario tarjetas -->
-    <form name="socioForm" ng-submit="socioForm.$valid && $ctrl.registrarTarjeta()">
+    <form name="socioForm" ng-submit="socioForm.$valid && $ctrl.registrarTarjeta(); socioForm.$setPristine();
+    socioForm.$setUntouched();">
       <div layout="row">        
         <!-- Input nombre -->
         <md-input-container md-no-float class="md-block">
@@ -134,10 +137,11 @@
       <md-button type="submit" id="regTarjeta" class="md-raised md-warn">Registrar</md-button>
     </form>
   </div>
-  <div layout="column" class="box formTarjeta animate-hide" ng-show="$ctrl.isRegistro && $ctrl.isTienda" layout-align="center">
+  <div layout="column" class="box formTarjeta animate-hide" ng-hide="!$ctrl.isTiendas" layout-align="center">
     <h2 class="registroTitle">Registro de Tiendas</h2>
       <!-- Formulario tiendas -->
-    <form name="tiendaForm" ng-submit="tiendaForm.$valid && $ctrl.registrarTienda()">
+    <form name="tiendaForm" ng-submit="tiendaForm.$valid && $ctrl.registrarTienda(); tiendaForm.$setPristine();
+    tiendaForm.$setUntouched();">
       <div layout="row">
         <!-- Input nombre tienda -->
         <md-input-container md-no-float class="md-block">
@@ -184,11 +188,11 @@
         <!-- Confirm Password -->
         <md-input-container md-no-float class="md-block">
           <md-icon class="material-icons md-light">security</md-icon>
-          <input required match-password="passwordT" type="password" placeholder="Confirme contraseña"
+          <input match-password="passwordT" required type="password" placeholder="Confirme contraseña"
           ng-model="$ctrl.confirmPasswordT" name="confirmPasswordT" id="phGrey">
           <!-- Confirm password error messages -->
-          <div ng-messages="tiendaForm.confirmPasswordT.$error">
-            <div ng-message="required">Requiere confirmar contraseña</div>
+          <div ng-messages="socioForm.confirmPasswordT.$error">
+            <div ng-message="required">Requiere confirmar la contraseña</div>
             <div ng-message="passwordMatch">La contraseña no es la misma</div>
           </div>
         </md-input-container>
