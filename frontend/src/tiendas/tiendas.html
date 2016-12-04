@@ -24,10 +24,11 @@
               <md-button class="md-fab md-mini md-warn md-hue-3" ng-click="$ctrl.exit()">
                 <md-icon class="material-icons" md-colors="{color: 'primary-50'}">exit_to_app</md-icon>
               </md-button>
-              <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="!$ctrl.isSettings" ng-click="$ctrl.isSettings = true">
+              <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="!$ctrl.isSettings" ng-click="$ctrl.isSettings = true;
+              $ctrl.isRegistro = false; $ctrl.newCompra = false; $ctrl.newOpCompra = false; $ctrl.isHistorial = false">
                 <md-icon class="material-icons" md-colors="{color: 'primary-50'}">settings</md-icon>
               </md-button>
-              <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="$ctrl.isSettings" ng-click="$ctrl.isSettings = false">
+              <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="$ctrl.isSettings" ng-click="$ctrl.isSettings = false;">
                 <md-icon class="material-icons" md-colors="{color: 'primary-50'}">shop</md-icon>
               </md-button>
             </md-fab-actions>
@@ -37,10 +38,10 @@
     </div>
   </md-toolbar>
   <div layout="row" layout-align="center center" class="animate-hide" ng-hide="$ctrl.isSettings">
-    <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.registrar(0)">Registro de compras</md-button>
-    <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.registrar(1)">Historial de compras</md-button>      
+    <md-button class="md-raised md-accent md-hue-2" ng-click="$ctrl.isRegistro = true; $ctrl.isHistorial = false">Registro de compras</md-button>
+    <md-button class="md-raised md-accent md-shade-3" ng-click="$ctrl.isHistorial = true; $ctrl.isRegistro = false">Historial de compras</md-button>      
   </div>
-  <div class="animate-hide" ng-show="$ctrl.isAction && $ctrl.isRegistro && !$ctrl.isSettings && !$ctrl.newCompra" layout="column">
+  <div class="animate-hide" ng-hide="!$ctrl.isRegistro" layout="column">
     <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.isSearchingC || $ctrl.selectedC.length">
       <form style="max-height: 40px">
         <md-input-container md-no-float>
@@ -57,7 +58,7 @@
       </md-button>
     </div>
     <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.selectedC.length" style="min-height: 52px">
-      <md-button class="md-raised md-warn md-hue-1" ng-click="$ctrl.newCompra = true; $ctrl.numTarjeta = $ctrl.selectedC[0].numTarjeta">Registrar compra</md-button>
+      <md-button class="md-raised md-warn md-hue-1" ng-click="$ctrl.newCompra = true; $ctrl.isRegistro = false; $ctrl.numTarjeta = $ctrl.selectedC[0].numTarjeta">Registrar compra</md-button>
     </div>
     <md-table-container>
       <table id="findTarjetasResult" md-table ng-model="$ctrl.selectedC" md-row-select>
@@ -88,11 +89,11 @@
     </md-table-container>
     <md-table-pagination md-limit="$ctrl.query.limit" md-limit-options="[5, 10, 15]" md-page="$ctrl.query.page" md-total="{{$ctrl.filterTarjetas.length}}" md-page-select></md-table-pagination>
   </div>
-  <div layout="column" class="box formTarjeta animate-hide" ng-show="$ctrl.isAction && $ctrl.isRegistro && !$ctrl.isSettings && $ctrl.newCompra" layout-align="center">
+  <div layout="column" class="box formTarjeta animate-hide" ng-hide="!$ctrl.newCompra" layout-align="center">
     <div layout="row">
       <h2 class="registroTitle">Registro de compras</h2>
       <div class="xButton">
-        <md-button class="md-warn md-hue-1" ng-click="$ctrl.newCompra = false">
+        <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.newCompra = false; $ctrl.isRegistro = true">
           <md-icon class="material-icons" md-colors="{color: 'primary-50'}">clear</md-icon>
         </md-button>
       </div>
@@ -109,8 +110,8 @@
       <md-button type="submit" class="md-raised md-warn">Registrar</md-button>
     </form>
   </div>
-  <div class="animate-hide" ng-show="$ctrl.isAction && $ctrl.isHistorial && !$ctrl.isSettings" layout="column">
-    <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.isSearchingH">
+  <div class="animate-hide" ng-hide="!$ctrl.isHistorial" layout="column">
+    <div layout="row" class="animate-hide-search-b" ng-hide="!$ctrl.isSearchingH || $ctrl.selectedH.length">
       <form style="max-height: 40px">
         <md-input-container md-no-float>
           <input style="min-width: 580px" ng-model="$ctrl.searchTextH.numTarjeta" type="text" placeholder="Buscar...">
@@ -120,13 +121,21 @@
         <md-icon class="material-icons" md-colors="{color: 'primary-50'}">undo</md-icon>
       </md-button>
     </div>
-    <div ng-hide="$ctrl.isSearchingH" class="animate-hide-search-a">
+    <div ng-hide="$ctrl.isSearchingH || $ctrl.selectedH.length" class="animate-hide-search-a">
       <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSearchingH = true">
         <md-icon class="material-icons" md-colors="{color: 'primary-50'}">search</md-icon>
       </md-button>
     </div>
+    <div layout="row" layout-align="end" class="animate-hide-search-b" ng-hide="!$ctrl.selectedH.length" style="min-height: 52px">
+      <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.modCompra = true">
+        <md-icon class="material-icons">edit</md-icon>        
+      </md-button>
+      <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.deleteCompra = true">
+        <md-icon class="material-icons">delete</md-icon>        
+      </md-button>
+    </div>
     <md-table-container>
-      <table id="findComprasResult" md-table ng-model="$ctrl.selectedH">
+      <table id="findComprasResult" md-table ng-model="$ctrl.selectedH" md-row-select>
         <thead md-head md-order="fecha">
           <tr md-row>
             <th md-column md-numeric md-order-by="numTarjeta"><span>Número de tarjeta</span></th>
@@ -146,35 +155,61 @@
     </md-table-container>
     <md-table-pagination md-limit="$ctrl.query.limit" md-limit-options="[5, 10, 15]" md-page="$ctrl.query.page" md-total="{{$ctrl.filterCompras.length}}" md-page-select></md-table-pagination>
   </div>
-  <div layout="column" style="margin-top: 10px" class="box formTarjeta animate-hide" ng-show="$ctrl.isSettings" layout-align="center">
-    <h2 class="registroTitle">Modifica tus datos</h2>
+  <div layout="column" style="margin-top: 10px" class="box formTarjeta animate-hide" ng-hide="!$ctrl.isSettings" layout-align="center">
+    <div layout="row" layout-align="space-between">    
+      <h2 class="registroTitle">Modifica tus datos</h2>
+      <div class="xButton">
+        <md-button style="max-width: 40px; min-width: 40px" class="md-warn md-hue-1" ng-click="$ctrl.newCompra = false; $ctrl.isRegistro = true">
+          <md-icon class="material-icons" md-colors="{color: 'primary-50'}">clear</md-icon>
+        </md-button>
+      </div>
+    </div>
     <!-- Formulario tiendas -->
-    <form ng-submit="$ctrl.modificarTienda()">
+    <form name="tiendaForm" ng-submit="tiendaForm.$valid && $ctrl.modificarTienda()">
       <div layout="row">
-      <!-- Input nombre -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">shop</md-icon>
-        <input style="color: white" ng-disabled="true" ng-model="$ctrl.nombreTienda" type="text" placeholder="Nombre de la tienda" id="phGrey">
-      </md-input-container>
+        <!-- Input nombre -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">shop</md-icon>
+          <input style="color: white" ng-disabled="true" ng-model="$ctrl.nombreTienda" type="text" placeholder="Nombre de la tienda" id="phGrey">
+        </md-input-container>
         <!-- Input primerApellido -->
         <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">home</md-icon>
+          <md-icon class="material-icons md-light">home</md-icon>
           <input style="color: white" ng-model="$ctrl.direccionTienda" type="text" placeholder="Dirección" id="phGrey">
         </md-input-container>
         <!-- Input segundoApellido -->
         <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">phone</md-icon>
+          <md-icon class="material-icons md-light">phone</md-icon>
           <input style="color: white" ng-model="$ctrl.telefonoTienda" type="text" placeholder="Teléfono" id="phGrey">
         </md-input-container>
-        </div>
+      </div>
+      <div layout="row">
+        <!-- Password -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">lock</md-icon>
+          <input ng-maxlength="30" ng-minlength="6" type="password" placeholder="Contraseña"
+          ng-model="$ctrl.password" name="password" id="phGrey" ng-pattern="/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/">
+          <!-- Password error messages -->
+          <div ng-messages="tiendaForm.password.$error">
+            <div ng-message="pattern">Requiere contraseña alfanumérica</div>
+            <div ng-message="maxlength">Máxima longitud de 30 caracteres</div>
+            <div ng-message="minlength">Mínima longitud de 6 caracteres</div>
+          </div>
+        </md-input-container>
+        <!-- Confirm Password -->
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">security</md-icon>
+          <input match-password="password" type="password" placeholder="Confirme contraseña"
+          ng-model="$ctrl.confirmPassword" name="confirmPassword" id="phGrey">
+          <!-- Confirm password error messages -->
+          <div ng-messages="tiendaForm.confirmPassword.$error">
+            <div ng-message="passwordMatch">La contraseña no es la misma</div>
+          </div>
+        </md-input-container>
+    </div>
       <!-- Boton submit del formulario -->
       <md-button type="submit" id="regTienda" class="md-raised md-warn">Modificar</md-button>
       <md-button type="button" id="elimTienda" ng-click="$ctrl.eliminarCuenta($event)" class="md-warn">Eliminar Cuenta</md-button>      
     </form>
   </div>
 </div>
-
-
-
-
-

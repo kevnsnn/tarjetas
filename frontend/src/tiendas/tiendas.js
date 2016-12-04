@@ -31,7 +31,6 @@ class TiendasController {
       limit: 5,
       page: 1
     };
-    this.promise = null;
     this.filter = {
       options: {
         debounce: 500
@@ -40,18 +39,6 @@ class TiendasController {
     this.getCompras();
     this.getTarjetas();
     this.getTienda();
-  }
-
-  registrar(tipo) {
-    this.isAction = true;
-    if (tipo === 0) {
-      this.isRegistro = true;
-      this.isHistorial = false;
-    }
-    if (tipo === 1) {
-      this.isHistorial = true;
-      this.isRegistro = false;
-    }
   }
 
   /* Funcion que se encarga de realizar el post de tarjetas */
@@ -125,7 +112,12 @@ class TiendasController {
   }
 
   modificarTienda() {
-    this.$http.put(`http://localhost:8000/api/tiendas/${this.user}`, {direccion: this.direccionTienda, telefono: this.telefonoTienda})
+    if (this.password) {
+      this.modificaciones = {direccion: this.direccionTienda, telefono: this.telefonoTienda, password: this.password};
+    } else {
+      this.modificaciones = {direccion: this.direccionTienda, telefono: this.telefonoTienda};
+    }
+    this.$http.put(`http://localhost:8000/api/tiendas/${this.nombreTienda}`, this.modificaciones)
       .then(res => {
         this.$log.debug('Response from backend', res);
         this.$mdDialog.show(
@@ -140,14 +132,8 @@ class TiendasController {
       .catch(reason => {
         this.$log.debug('Fail fetching messages from backend', reason);
       });
-  }
-
-  success(compras) {
-    this.compras = compras;
-  }
-
-  settings() {
-    this.isSettings = true;
+    this.password = '';
+    this.confirmPassword = '';
   }
 
   exit() {

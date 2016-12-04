@@ -122,9 +122,9 @@
       <md-input-container md-no-float class="md-block">
         <md-icon class="material-icons md-light">lock</md-icon>
         <input ng-maxlength="30" ng-minlength="6" type="password" placeholder="Contraseña"
-        ng-model="$ctrl.passwordS" name="passwordS" id="phGrey" ng-pattern="/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/">
+        ng-model="$ctrl.password" name="password" id="phGrey" ng-pattern="/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/">
         <!-- Password error messages -->
-        <div ng-messages="socioForm.passwordS.$error">
+        <div ng-messages="socioForm.password.$error">
           <div ng-message="pattern">Requiere contraseña alfanumérica</div>
           <div ng-message="maxlength">Máxima longitud de 30 caracteres</div>
           <div ng-message="minlength">Mínima longitud de 6 caracteres</div>
@@ -133,10 +133,10 @@
       <!-- Confirm Password -->
       <md-input-container md-no-float class="md-block">
         <md-icon class="material-icons md-light">security</md-icon>
-        <input match-password="passwordS" type="password" placeholder="Confirme contraseña"
-        ng-model="$ctrl.confirmPasswordS" name="confirmPasswordS" id="phGrey">
+        <input match-password="password" type="password" placeholder="Confirme contraseña"
+        ng-model="$ctrl.confirmPassword" name="confirmPassword" id="phGrey">
         <!-- Confirm password error messages -->
-        <div ng-messages="socioForm.confirmPasswordS.$error">
+        <div ng-messages="socioForm.confirmPassword.$error">
           <div ng-message="passwordMatch">La contraseña no es la misma</div>
         </div>
       </md-input-container>
@@ -147,8 +147,3 @@
     </form>
   </div>
 </div>
-
-
-
-
-
