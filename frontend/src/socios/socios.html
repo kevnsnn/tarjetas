@@ -49,7 +49,7 @@
         </thead>
         <tbody md-body>
           <tr md-row md-select="tienda" md-select-id="_id" md-auto-select
-          ng-repeat="tienda in $ctrl.filterTiendas = ($ctrl.tiendas | orderBy: fecha | filter: $ctrl.searchText) | limitTo: $ctrl.query.limit: ($ctrl.query.page - 1) * $ctrl.query.limit">
+          ng-repeat="tienda in $ctrl.filterTiendas = ($ctrl.tiendas | orderBy: nombreTienda | filter: $ctrl.searchText) | limitTo: $ctrl.query.limit: ($ctrl.query.page - 1) * $ctrl.query.limit">
             <td md-cell>{{tienda.nombreTienda}}</td>
             <td md-cell>{{tienda.direccion}}</td>                        
             <td md-cell>{{tienda.telefono}}</td>

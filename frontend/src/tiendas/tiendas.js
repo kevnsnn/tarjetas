@@ -26,7 +26,7 @@ class TiendasController {
     this.query = {
       filter: '',
       order: '_id',
-      limit: 10,
+      limit: 5,
       page: 1
     };
     this.filter = {
@@ -136,10 +136,7 @@ class TiendasController {
   }
 
   modifyCompra() {
-    this.compraMod = this.compras.find(() => {
-      return this.numTarjetaMod;
-    });
-    this.$http.put(`http://localhost:8000/api/compras/${this.compraMod._id}`, {numTarjeta: this.numTarjetaMod, importe: this.importeMod})
+    this.$http.put(`http://localhost:8000/api/compras/${this.selectedH[0]._id}`, {numTarjeta: this.numTarjetaMod, importe: this.importeMod})
       .then(res => {
         this.$log.debug('Response from backend', res);
         this.$mdDialog.show(

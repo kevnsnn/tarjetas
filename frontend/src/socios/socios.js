@@ -19,7 +19,7 @@ class SociosController {
     this.selected = [];
     this.query = {
       order: '_id',
-      limit: 10,
+      limit: 5,
       page: 1
     };
     this.getTarjeta();

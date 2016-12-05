@@ -113,6 +113,7 @@ function listByTienda(req, res, next) {
 
 /* post: Control registro de datos compra */
 function create(req, res, next) {
+  const compra = new Compra(req.body); /* Construccion objeto tipo schema Compra a partir de datos del cuerpo */
   /* Datos de compra a verificar */
   const numTarjeta = compra.numTarjeta;
   const nombreTienda = compra.nombreTienda;
@@ -124,8 +125,6 @@ function create(req, res, next) {
       verifyTarjeta(numTarjeta).then(verifiedTarjeta => { /* Verificacion de tarjeta */
         if (verifiedTarjeta) {
           /* Tarjeta verificada */
-          const compra = new Compra(req.body); /* Construccion objeto tipo schema Compra a partir de datos del cuerpo */
-
           compra.save() /* Insercion de datos en DB a partir de objeto tipo schema construido previamente */
             .then(compra => {
               /* Caso de exito */

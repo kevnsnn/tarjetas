@@ -1,5 +1,5 @@
 <!-- Accesos -->
-<div layout="column" layout-fill layout-align="start center">
+<div layout="column" layout-fill style="overflow: hidden" layout-align="start center">
   <md-toolbar md-scroll-shrink>
     <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
       <div layout="row" layout-align="space-around center">
@@ -47,7 +47,7 @@
     <div layout="row" class="animate-hide-search-b" ng-hide="$ctrl.selectedC.length">
       <form style="max-height: 52px; min-height: 52px">
         <md-input-container md-no-float>
-          <input id="autoComplete" style="min-width: 1160px" ng-model="$ctrl.searchTextC" type="text"
+          <input id="autoComplete" style="min-width: 880px" ng-model="$ctrl.searchTextC" type="text"
           placeholder=" Busque y seleccione un socio para registrar una nueva compra">
         </md-input-container>
       </form>
@@ -56,7 +56,7 @@
       <md-button class="md-raised md-warn md-hue-1" ng-click="$ctrl.newCompra = !$ctrl.newCompra;
       $ctrl.numTarjeta = $ctrl.selectedC[0].numTarjeta">Registrar compra</md-button>
     </div>
-    <md-table-container>
+    <md-table-container style="overflow: inherit">
       <table id="findTarjetasResult" md-table ng-model="$ctrl.selectedC" md-row-select>
         <thead md-head md-order="numTarjeta">
           <tr md-row>
@@ -64,8 +64,6 @@
             <th md-column md-numeric md-order-by="nombre"><span>Nombre</span></th>
             <th md-column md-numeric md-order-by="primerApellido"><span>Primer apellido</span></th>                                    
             <th md-column md-numeric md-order-by="segundoApellido"><span>Segundo apellido</span></th>                                    
-            <th md-column md-numeric md-order-by="direccion"><span>Dirección</span></th>                                    
-            <th md-column md-numeric md-order-by="telefono"><span>Teléfono</span></th>                                    
             <th md-column md-numeric md-order-by="email"><span>email</span></th>                                    
           </tr>
         </thead>
@@ -76,8 +74,6 @@
             <td md-cell>{{tarjeta.nombre}}</td>
             <td md-cell>{{tarjeta.primerApellido}}</td>
             <td md-cell>{{tarjeta.segundoApellido}}</td>
-            <td md-cell>{{tarjeta.direccion}}</td>
-            <td md-cell>{{tarjeta.telefono}}</td>
             <td md-cell>{{tarjeta.email}}</td>
           </tr>
         </tbody>
@@ -165,7 +161,7 @@
         <md-icon class="material-icons md-light">euro_symbol</md-icon>        
         <input style="color: white" ng-model="$ctrl.importeMod" type="text" placeholder="Importe de compra" id="phGrey">
       </md-input-container>
-      <md-button type="submit" class="md-raised md-warn">Registrar</md-button>
+      <md-button type="submit" class="md-raised md-warn">Modificar</md-button>
     </form>
   </div>
   <div layout="column" style="margin-top: 10px" class="box formTarjeta animate-hide" ng-hide="!$ctrl.isSettings" layout-align="center">

@@ -6,10 +6,10 @@
         <img ng-src="{{ $ctrl.icon }}" class="icon"/>
         <span class="title"><b>TARJETA</b></span>
       </div>
-      <div layout="row" layout-align="start">
-        <span class="subtitle"><sup><em>¡Acceso a socios y tiendas!</em></sup></span>
+      <div layout="row" layout-align="start" style="margin-top: 10px">
+        <span class="subtitle"><sup><em>¿Ya estás registrado?</em></sup></span>
       </div>
-      <div flex=40 style="margin-top: -14px">
+      <div flex=70 style="margin-top: -14px">
       <form name="loginForm" ng-submit="loginForm.$valid && $ctrl.loginUser()" layout="row" layout-align="center center">
         <!-- Username -->
         <div>
@@ -34,7 +34,7 @@
         </md-input-container>
         </div>
       <!-- Button form -->
-      <md-button type="submit" class="md-raised md-warn botonLogin">login</md-button>
+      <md-button type="submit" class="md-raised md-warn botonLogin">entrar</md-button>
       </form>
       </div>
     </div>
