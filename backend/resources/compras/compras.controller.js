@@ -6,145 +6,136 @@ import Tienda from '../tiendas/tiendas.model';
 
 /* Funcion que verifica datos de tiendas */
 function verifyTienda(nombreTienda) {
-  /* Verificar si num de tarjeta registrado */
-  return Tienda.findTienda(nombreTienda)
+  return Tienda.findTienda(nombreTienda) /* Busqueda de tienda */
     .then(tienda => {
       /* Caso de exito */
       /* Comprobacion de resultado */
       if (tienda) {
-        return true;
+        return true;  /* Verificacion correcta */
       } else {
-        return false
+        return false; /* Verificacion incorrecta */
       }
     })
     .catch(reason => {
       /* Caso de fallo */
       console.log('Error verificando tienda: ', reason);
-      return false;
+      return false; /* Verificacion incorrecta por problema en DB buscando tienda */
     });
 }
 
 /* Funcion que verifica datos de tarjetas */
 function verifyTarjeta(numTarjeta) {
-  let result = false
-  /* Verificar si num de tarjeta registrado */
-  return Tarjeta.findTarjeta(numTarjeta)
+  return Tarjeta.findTarjeta(numTarjeta) /* Busqueda de tarjeta */
     .then(tarjeta => {
       /* Caso de exito */
       /* Comprobacion de resultado */
       if (tarjeta) {
-        return true;
+        return true;  /* Verificacion correcta */
       } else {
-        return false;
+        return false; /* Verificacion incorrecta */
       }
     })
     .catch(reason => {
       /* Caso de fallo */
       console.log('Error verificando tarjeta: ', reason);
-      return false;
+      return false; /* Verificacion incorrecta por problema en DB buscando tarjeta */
     });
 }
 
 /* Funcion de acumulacion de puntos */
 function accumulate(numTarjeta) {
-  /* Obtencion de compras */
-  return Compra.listByNumTarjeta(numTarjeta)
-  .then(compras => {
+  return Compra.listByNumTarjeta(numTarjeta) /* Obtencion de compras por numTarjeta */
+    .then(compras => {
       /* Caso de exito */
-      let puntos = 0;
-      let dec = 0;
+      let puntos = 0; /* Acumulador de puntos */
+      let dec = 0;    /* Parte decimal de importe */
 
-      /* Iteracion de compras para calulo y acumulacion de puntos */
+      /* Iteracion de compras para calculo y acumulacion de puntos */
       for(let i = 0; i < compras.length; i++) {
-        /* Comprobacion de si importe minimo */
-          puntos += Math.floor(compras[i].importe);
-          dec = compras[i].importe % 1;
-          if (dec > 0.5) {
-            puntos++;
-          }
+        puntos += Math.floor(compras[i].importe); /* Acumulacion de puntos con parte entera de importe */
+        dec = compras[i].importe % 1;             /* Obtencion de parte decimal del importe */
+
+        if (dec > 0.5) {                          /* Si parte decimal mayor que 0.5 */
+          puntos++;                               /* Acumular +1 punto */
         }
+      }
         
-      /* Actualizar puntos */
-      return Tarjeta.update(numTarjeta, { puntos: puntos })
+      return Tarjeta.update(numTarjeta, { puntos: puntos }) /* Actualizacion de puntos */
         .then(tarjeta => {
           /* Caso de exito */
+          /* Comprobacion de resultado */
           if (tarjeta) {
-            /* Actualizacion correcta */
-            return true;
+            return true;  /* Actualizacion correcta */
           } else {
-            /* Actualizacion incorrecta */
-            return false;            
+            return false; /* Actualizacion incorrecta */            
           }
         })
-        .catch((reason) => {
+        .catch(reason => {
           /* Caso de fallo */
           console.log('Error acumulando puntos: ', reason);
-          return false;          
+          return false; /* Acumulacion incorrecta por problema en DB actualizando puntos */
         });
     })
     .catch(reason => {
       /* Caso de fallo */
       console.log('Error listando compras: ', reason);
-      return false;      
+      return false; /* Acumulacion incorrecta por problema en db buscando compras por numTarjeta */
     });
 }
 
 /* get: Control de consulta de datos compras */
 function list(req, res, next) {
-    /* Llamada a consulta del modelo */
-    Compra.list()
+  Compra.list() /* Llamada a consulta del modelo */
     .then(compras => {
-        /* Caso de exito */
-        res.status(200).json(compras); /* Codigo: 200 + resultado de consulta por cuerpo */
+      /* Caso de exito */
+      res.status(200).json(compras); /* Codigo: 200 + resultado de consulta por cuerpo */
     })
     .catch(reason => {
-        /* Caso de fallo */
-        console.log('Error listando compras: ', reason);
-      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
+      /* Caso de fallo */
+      console.log('Error listando compras: ', reason);
+      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 }
 
 /* get: Control de consulta de datos compras */
 function listByTienda(req, res, next) {
-    /* Llamada a consulta del modelo */
-    Compra.listByTienda(req.params.nombreTienda)
+  Compra.listByTienda(req.params.nombreTienda) /* Llamada a consulta del modelo */
     .then(compras => {
-        /* Caso de exito */
-        res.status(200).json(compras); /* Codigo: 200 + resultado de consulta por cuerpo */
+      /* Caso de exito */
+      res.status(200).json(compras); /* Codigo: 200 + resultado de consulta por cuerpo */
     })
     .catch(reason => {
-        /* Caso de fallo */
-        console.log('Error listando compras: ', reason);
-      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
+      /* Caso de fallo */
+      console.log('Error listando compras: ', reason);
+      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 }
 
 /* post: Control registro de datos compra */
 function create(req, res, next) {
-  /* Construccion objeto tipo schema compras a partir de datos del cuerpo */
-  const compra = new Compra(req.body);
-
   /* Datos de compra a verificar */
   const numTarjeta = compra.numTarjeta;
   const nombreTienda = compra.nombreTienda;
 
-  /* Verificacion de datos */ 
-  verifyTienda(nombreTienda).then(verifiedTienda => {
+  /* Verificacion de datos */
+  verifyTienda(nombreTienda).then(verifiedTienda => {     /* Verificacion de tienda */
     if (verifiedTienda) {
-      verifyTarjeta(numTarjeta).then(verifiedTarjeta => {
+      /* Tienda verificada */
+      verifyTarjeta(numTarjeta).then(verifiedTarjeta => { /* Verificacion de tarjeta */
         if (verifiedTarjeta) {
-          /* Insercion de datos en DB a partir de objeto tipo schema construido previamente */
-          compra.save()
+          /* Tarjeta verificada */
+          const compra = new Compra(req.body); /* Construccion objeto tipo schema Compra a partir de datos del cuerpo */
+
+          compra.save() /* Insercion de datos en DB a partir de objeto tipo schema construido previamente */
             .then(compra => {
               /* Caso de exito */
-              /* Acumulacion de puntos */
-              accumulate(compra.numTarjeta).then(isAccumulated => {
+              accumulate(compra.numTarjeta).then(isAccumulated => { /* Acumulacion de puntos */
                 if (isAccumulated) {
-                  /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
-                  res.status(201).json({ status: 0, msg: 'Compra almacenada y puntos acumulados' });
+                  /* Acumulacion de puntos correcta */
+                  res.status(201).json({ status: 0, msg: 'Compra almacenada y puntos acumulados' }); /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
                 } else {
-                  /* Status: Compra correcta y acumulacion de puntos fallida + codigo: 201 + mensaje de exito */
-                  res.status(201).json({ status: 1, msg: 'Compra almacenada pero fallo en acumulacion de puntos' });
+                  /* Acumulacion de puntos incorrecta */
+                  res.status(201).json({ status: 1, msg: 'Compra almacenada pero fallo en acumulacion de puntos' }); /* Status: Compra correcta y acumulacion de puntos fallida + codigo: 201 + mensaje de exito */
                 }
               });
             })
@@ -154,10 +145,12 @@ function create(req, res, next) {
               res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
             });
         } else {
+          /* Tarjeta no verificada */
           res.status(401).json({ msg: 'Credenciales erroneas' }); /* Codigo: 401 + mensaje de fallo */
         }
       });
     } else {
+      /* Tienda no verificada */
       res.status(401).json({ msg: 'Credenciales erroneas' }); /* Codigo: 401 + mensaje de fallo */      
     }
   })
@@ -170,35 +163,35 @@ function create(req, res, next) {
 
 /* put: Control actualizaciones de datos compra */
 function modify(req, res, next) {
-  verifyTarjeta(req.body.numTarjeta).then(verifiedTarjeta => {
+  verifyTarjeta(req.body.numTarjeta).then(verifiedTarjeta => { /* Verificacion de tarjeta */
     if (verifiedTarjeta) {
-      /* Llamada a consulta del modelo */
-      Compra.update(req.params.id, req.body)
+      /* Tarjeta verificada */
+      Compra.update(req.params.id, req.body) /* Llamada a consulta del modelo */
         .then(oldCompra => {
           /* Caso de exito */
           if (oldCompra) {
             /* Caso actualizacion de datos correcta */
-            /* Actualizacion de los puntos de la tarjeta que figura en la compra modificada */
-            accumulate(oldCompra.numTarjeta).then(isAccumulated => {
+            accumulate(oldCompra.numTarjeta).then(isAccumulated => { /* Actualizacion de puntos de tarjeta antigua */
               if (isAccumulated) {
+                /* Acumulacion correcta */
                 if (req.body.numTarjeta && req.body.numTarjeta !== oldCompra.numTarjeta) {
-                  /* Si la modificacion provoca cambio de puntos de otra tarjeta -> actualizar esa otra tarjeta */                  
-                  accumulate(req.body.numTarjeta).then(isOtherAccumulated => {
+                  /* Caso actualizacion implica actualizar dos tarjetas */
+                  accumulate(req.body.numTarjeta).then(isOtherAccumulated => { /* Actualizacion de puntos de tarjeta nueva */
                     if (isOtherAccumulated) {
-                       /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
-                      res.status(200).json({ status: 0, msg: 'Compra y puntos modificados' });
+                      /* Acumulacion correcta */
+                      res.status(200).json({ status: 0, msg: 'Compra y puntos modificados' }); /* Status: Compra y acumulacion de puntos correcto + codigo: 200 + mensaje de exito */
                     } else {
-                    /* Status: Compra correcta y acumulacion de puntos fallida + codigo: 201 + mensaje */
-                    res.status(200).json({ status: 2, msg: 'Compra modificada pero puntos de antigua tarjeta no modificada' });
-                    }   
+                      /* Acumulacion incorrecta */
+                      res.status(200).json({ status: 2, msg: 'Compra modificada pero puntos de nueva tarjeta no modificada' }); /* Status: Compra correcta y acumulacion de puntos fallida + codigo: 200 + mensaje */
+                    }
                   });
                 } else {
-                  /* Status: Compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
-                  res.status(200).json({ status: 0, msg: 'Compra y puntos modificados' });
+                  /* Caso actualizacion implica actualizar una tarjeta */
+                  res.status(200).json({ status: 0, msg: 'Compra y puntos modificados' }); /* Status: Compra y acumulacion de puntos correcto + codigo: 200 + mensaje de exito */
                 }
               } else {
-                /* Status: Compra correcta, fallo en puntos + codigo: 201 + mensaje */                
-                res.status(200).json({ status: 1, msg: 'Compra modificada pero puntos no modificados' });
+                /* Acumulacion incorrecta */
+                res.status(200).json({ status: 1, msg: 'Compra modificada pero puntos de antigua tarjeta no modificada' }); /* Status: Compra correcta, fallo en puntos + codigo: 200 + mensaje */
               }
             });   
           } else {
@@ -212,31 +205,28 @@ function modify(req, res, next) {
           res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
         });
     } else {
-      /* Status: Compra correcta, fallo en puntos + codigo: 201 + mensaje */                
-      res.status(404).json({ msg: 'Número de tarjeta no encontrada' });       
+      /* Tarjeta no encontrada */
+      res.status(404).json({ msg: 'Número de tarjeta no encontrada' }); /* Codigo: 404 + mensaje de fallo */
     }
   });
 }
 
-/* delete: Control borrado de datos tarjetas */
+/* delete: Control borrado de datos compras */
 function remove(req, res, next) {
-  /* Busqueda de datos a borrar a partir de consulta del modelo */
-  Compra.findCompra(req.params.id)
+  Compra.findCompra(req.params.id) /* Busqueda de compra a partir de consulta del modelo */
     .then(compra => {
       /* Caso de exito */
       /* Comprobacion de resultado */
       if (compra) {
-        /* Eliminacion de datos a partir de objeto tipo schema obtenido de la consulta */
-        compra.remove()
+        compra.remove() /* Eliminacion de compra a partir de objeto tipo schema obtenido de la consulta */
           .then(() => {
-          /* Actualizacion de los puntos de la tarjeta que figura en la compra eliminada */
-          accumulate(compra.numTarjeta).then(isAccumulated => {
+            accumulate(compra.numTarjeta).then(isAccumulated => { /* Actualizacion de puntos de tarjeta que figura en la compra eliminada */
             if (isAccumulated) {
-              /* Status: Eliminacion compra y acumulacion de puntos correcto + codigo: 204 + mensaje de exito */
-              res.status(201).json({ status: 0, msg: 'Compra eliminada y puntos modificados' });
+              /* Acumulacion correcta */
+              res.status(201).json({ status: 0, msg: 'Compra eliminada y puntos modificados' }); /* Status: Eliminacion compra y acumulacion de puntos correcto + codigo: 201 + mensaje de exito */
             } else {
-              /* Status: Eliminacion compra correcta, fallo en puntos + codigo: 204 + mensaje */                
-              res.status(201).json({ status: 1, msg: 'Compra eliminada pero puntos no modificados' }); 
+              /* Acumulacion incorrecta */
+              res.status(201).json({ status: 1, msg: 'Compra eliminada pero puntos no modificados' }); /* Status: Eliminacion compra correcta, fallo en puntos + codigo: 204 + mensaje */ 
             }
           });
         })

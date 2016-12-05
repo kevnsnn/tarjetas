@@ -10,14 +10,10 @@ import Login from './login';
 /* Declaracion de variable para enrutamiento */
 const router = express.Router();
 
-/* Ruta recurso tarjetas */
-router.use('/tarjetas', tarjetasRoutes);
-/* Ruta recurso tiendas */
-router.use('/tiendas', tiendasRoutes);
-/* Ruta recurso tiendas */
-router.use('/compras', comprasRoutes);
-/* Ruta login */
-router.route('/login')
+router.use('/tarjetas', tarjetasRoutes);  /* Ruta recurso tarjetas */
+router.use('/tiendas', tiendasRoutes);    /* Ruta recurso tiendas */
+router.use('/compras', comprasRoutes);    /* Ruta recurso compras */
+router.route('/login')                    /* Ruta login */
   .post(Login.login);
 
 /* Exportacion enrutamiento */

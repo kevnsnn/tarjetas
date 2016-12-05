@@ -60,14 +60,15 @@ TarjetaSchema.statics = {
   update(numTarjeta, modificaciones) {
     return this.findOneAndUpdate({ numTarjeta: numTarjeta }, modificaciones, { multi: true });
   },
-  /* Busca los datos de numTarjeta */
+  /* Busca los datos por numTarjeta */
   findTarjeta(numTarjeta) {
     return this.findOne({ numTarjeta: numTarjeta });
   },
-  /* Busca los datos de numTarjeta */
+  /* Busca los datos por email */
   findByEmail(email) {
     return this.findOne({ email: email });
   },
+  /* Comprueba credenciales de logueo de socio */
   findByCredentials(email, password) {
     return this.findOne({email: email, password: password}).select('-password');
   }

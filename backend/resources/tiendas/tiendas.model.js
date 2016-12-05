@@ -42,6 +42,7 @@ TiendaSchema.statics = {
   findTienda(nombreTienda) {
     return this.findOne({ nombreTienda: nombreTienda }).select('-_id -password');
   },
+  /* Comprueba credenciales de logueo de nombreTienda */
   findByCredentials(nombreTienda, password) {
     return this.findOne({nombreTienda: nombreTienda, password: password}).select('-password');
   }

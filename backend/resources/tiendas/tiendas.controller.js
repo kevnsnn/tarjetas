@@ -4,65 +4,62 @@ import Tienda from './tiendas.model';
 
 /* get: Control de consulta de datos tiendas */
 function list (req, res, next) {
-    /* Llamada a consulta del modelo */
-    Tienda.list()
+  Tienda.list() /* Llamada a consulta del modelo */
     .then(tiendas => {
-        /* Caso de exito */
-        res.status(200).json(tiendas); /* Codigo: 200 + resultado de consulta por cuerpo */
+      /* Caso de exito */
+      res.status(200).json(tiendas); /* Codigo: 200 + resultado de consulta por cuerpo */
     })
     .catch(reason => {
-        /* Caso de fallo */
-        console.log('Error listando tiendas: ', reason);
-      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
+      /* Caso de fallo */
+      console.log('Error listando tiendas: ', reason);
+      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 }
 
 /* get: Control de consulta de datos de una tienda */
 function findTienda (req, res, next) {
-    /* Llamada a consulta del modelo */
-    Tienda.findTienda(req.params.nombreTienda)
+  Tienda.findTienda(req.params.nombreTienda) /* Llamada a consulta del modelo */
     .then(tienda => {
-        /* Caso de exito */
-        res.status(200).json(tienda); /* Codigo: 200 + resultado de consulta por cuerpo */
+      /* Caso de exito */
+      res.status(200).json(tienda); /* Codigo: 200 + resultado de consulta por cuerpo */
     })
     .catch(reason => {
-        /* Caso de fallo */
-        console.log('Error buscando tienda: ', reason);
-      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
-    });
+      /* Caso de fallo */
+      console.log('Error buscando tienda: ', reason);
+      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
+  });
 }
 
 /* post: Control registro de datos tiendas */
 function create(req, res, next) {
-  /* Construccion objeto tipo schema tiendas a partir de datos del cuerpo */
-  const tienda = new Tienda(req.body);
-  /* Insercion de datos en DB a partir de objeto tipo schema construido previamente */
-  tienda.save()
+  const tienda = new Tienda(req.body); /* Construccion objeto tipo schema Tienda a partir de datos del cuerpo */
+
+  tienda.save() /* Insercion de datos en DB a partir de objeto tipo schema construido previamente */
     .then(() => {
       /* Caso de exito */
       res.status(201).json({ msg: 'Tienda almacenada' }); /* Codigo: 201 + mensaje de exito */
     })
-    .catch((reason) => {
+    .catch(reason => {
       /* Caso de fallo */
       console.log('Error almacenando tienda: ', reason);
-      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo*/
+      res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 }
 
 /* put: Control actualizaciones de datos tiendas */
 function modify(req, res, next) {
-  /* Llamada a consulta del modelo */
-  Tienda.update(req.params.nombreTienda, req.body)
-    .then((tienda) => {
+  Tienda.update(req.params.nombreTienda, req.body) /* Llamada a consulta del modelo */
+    .then(tienda => {
       /* Caso de exito */
       if (tienda) {
         /* Caso de actualizacion de datos correcta */
-        res.status(200).json(tienda); /* Codigo: 201 + mensaje de exito */  
+        res.status(200).json(tienda); /* Codigo: 200 + nuevo documento tienda */
       } else {
+        /* Caso tienda no encontrada */
         res.status(404).json({ msg: 'Tienda a modificar no encontrada' }); /* Codigo: 404 + mensaje de fallo */
       }
     })
-    .catch((reason) => {
+    .catch(reason => {
       /* Caso de fallo */
       console.log('Error modificando tienda: ', reason);
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
@@ -71,17 +68,16 @@ function modify(req, res, next) {
 
 /* delete: Control borrado de datos tiendas */
 function remove(req, res, next) {
-  /* Busqueda de datos a borrar a partir de consulta del modelo */
-  const tienda = Tienda.findTienda(req.params.nombreTienda);
-  /* Eliminacion de datos a partir de objeto tipo schema obtenido de la consulta */
-  tienda.remove()
+  const tienda = Tienda.findTienda(req.params.nombreTienda); /* Busqueda tienda a borrar a partir de consulta del modelo */
+  
+  tienda.remove() /* Eliminacion de tienda a partir de objeto tipo schema obtenido de la consulta */
     .then(() => {
       /* Caso de exito */
       res.status(204).json({ msg: 'Tienda eliminada'}); /* Codigo: 204 + mensaje de exito */
     })
     .catch(reason => {
       /* Caso de fallo */
-      console.log('Error modificando tienda: ', reason);
+      console.log('Error eliminando tienda: ', reason);
       res.status(500).json({ msg: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
     });
 }

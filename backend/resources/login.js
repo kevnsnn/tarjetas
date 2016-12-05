@@ -1,47 +1,56 @@
-import Tarjeta from './tarjetas/tarjetas.model';
-import Tienda from './tiendas/tiendas.model';
+/* Librerias npm */
 import jwt from 'jwt-simple';
 import moment from 'moment';
+/* Librerias locales */
+import Tarjeta from './tarjetas/tarjetas.model';
+import Tienda from './tiendas/tiendas.model';
 import config from '../config';
 
+/* Funcion controladora para logueo */
 function login(req, res, next) {
   if(req.body.email) {
-    const datos = new Tarjeta(req.body);
-    Tarjeta.findByCredentials(datos.email, datos.password)
-      .then((user) => {
+    /* Caso logueo de socio */
+    Tarjeta.findByCredentials(req.body.email, req.body.password) /* Comprobar credenciales de logueo */
+      .then(user => {
         if (user) {
+          /* Caso de exito: generar y enviar token */
           const payload = {
             sub: user,
             iat: moment().unix(),
-            exp: moment().add(3, "hours").unix(),
+            exp: moment().add(3, "hours").unix()
           }
         let token = jwt.encode(payload, config.secret, 'HS256');
-        res.status(200).json(token);
+        res.status(200).json(token); /* Status: Logueo correcta + codigo: 200 + token */
         } else {
-          res.status(401).json({msg: 'Fail credentials'});
+          res.status(401).json({msg: 'Fail credentials'}); /* Caso de fallo: credenciales erroneas */
         }  
       })
-      .catch((reason) => {            
-        res.status(500).json({ usr: 'DB blew up!' });
+      .catch(reason => {
+        /* Caso de fallo */
+        console.log('Error logueando socio: ', reason);        
+        res.status(500).json({ usr: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
       });
   } else {
-    const datos = new Tienda(req.body);
-    Tienda.findByCredentials(datos.nombreTienda, datos.password)
-      .then((user) => {
+    /* Caso logueo de tienda */
+    Tienda.findByCredentials(req.body.nombreTienda, req.body.password) /* Comprobar credenciales de logueo */
+      .then(user => {
         if (user) {
+          /* Caso de exito: generar y enviar token */
           const payload = {
             sub: user,
             iat: moment().unix(),
             exp: moment().add(12, "hours").unix(),
           }
         let token = jwt.encode(payload, config.secret, 'HS256');
-        res.status(200).json(token);
+        res.status(200).json(token); /* Status: Logueo correcta + codigo: 200 + token */
         } else {
-          res.status(401).json({msg: 'Fail credentials'});
+          res.status(401).json({msg: 'Fail credentials'}); /* Caso de fallo: credenciales erroneas */
         }  
       })
-      .catch((reason) => {            
-        res.status(500).json({ usr: 'DB blew up!' });
+      .catch(reason => {
+        /* Caso de fallo */
+        console.log('Error logueando tienda: ', reason);
+        res.status(500).json({ usr: 'DB blew up!' }); /* Codigo: 500 + mensaje de fallo */
       });
   }
 }
