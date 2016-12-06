@@ -96,7 +96,7 @@ class SociosController {
   }
 
   /* Funcion que elimina la cuenta del socio */
-  deleteCuenta(ev) {
+  deleteTarjeta(ev) {
     /* Variable de dialogo de confirmacion de eliminacion de cuenta */
     const confirm = this.$mdDialog.confirm()
       .title('¿Está seguro de que quiere eliminar su cuenta?')

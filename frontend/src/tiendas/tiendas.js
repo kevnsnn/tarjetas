@@ -238,7 +238,7 @@ class TiendasController {
   }
 
   /* Funcion que elimina la cuenta de la tienda */
-  deleteCuenta(ev) {
+  deleteTienda(ev) {
     /* Variable de dialogo de confirmacion de eliminacion de cuenta */
     const confirm = this.$mdDialog.confirm()
       .title('¿Está seguro de que quiere eliminar su cuenta?')
