@@ -5,33 +5,28 @@
 @subhead: #26A69A;
 
 /******************** Estilos ******************/
-/* caja de registro */
+
+/* Cuerpo sin scroll */
+body {
+  overflow: hidden;
+}
+
+/* cajas de registro */
 .box {
-  position: relative;
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
   background: @boxSign;
   overflow: hidden;
+  padding: 10px;  
 }
 
-/* Home content */
-.homeContent {
-  overflow: hidden;
-}
-
-/* Top toolbar */
-.topToolbar {
-  max-height: 25px;
-  min-height: 25px;
-}
-
-/* Sub head */
+/* subhead */
 .subhead { background: @subhead; }
 
-/* Iconos de tamaño 16px */
+/* iconos de tamaño 16px */
 .material-icons.md-16 { font-size: 16px; }
 
-/* Margenes de alineamiento incono-texto */
+/* margenes de alineamiento incono-texto */
 .iconAlign { margin: 2px -5px -6px; }
 
 /* Resalte texto */
@@ -43,119 +38,151 @@
   max-width: 40px;
 }
 
-.topForm {
-  max-height: 50px;
-}
-
+/* Alineamiento de botones en toolbars */
 .md-toolbar-tools .md-button {
     margin-top: -23px;
     margin-bottom: 0px;
 }
 
-.accessInfo {
-  min-height: 10px;
-}
+/* Placeholder en blanco */
+#phWhite::-webkit-input-placeholder { color: #FFFFFF; }
+#phWhite:-moz-placeholder { color: #FFFFFF; }
+#phWhite::-moz-placeholder { color: #FFFFFF; }
+#phWhite:-ms-input-placeholder { color: #FFFFFF; }
 
-.formTarjeta {
-  padding: 10px;
-}
-
-#phWhite::-webkit-input-placeholder {
-  color: #FFFFFF;
-}
-
-#phWhite:-moz-placeholder {
-  color: #FFFFFF;
-}
-
-#phWhite::-moz-placeholder {
-  color: #FFFFFF;
-}
-
-#phWhite:-ms-input-placeholder {
-  color: #FFFFFF;
-}
-
+/* Iconos en blanco */
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 
+/* Tamaño fuente de titulos */
 .title { font-size: 22px; }
 
+/* Tamaño fuente de subtitulos */ 
 .subtitle { font-size: 15px; }
 
+/* Color texto de titulos de registros */
 .registroTitle { color: #FFFFFF; }
 
-#phGrey::-webkit-input-placeholder {
-  color: #757575;
-}
+/* Placeholder en grises */
+#phGrey::-webkit-input-placeholder { color: #757575; }
+#phGrey:-moz-placeholder { color: #757575; }
+#phGrey::-moz-placeholder { color: #757575; }
+#phGrey:-ms-input-placeholder { color: #757575; }
+#phGreyF::-webkit-input-placeholder { color: #BDBDBD; }
+#phGreyF:-moz-placeholder { color: #BDBDBD; }
+#phGreyF::-moz-placeholder { color: #BDBDBD; }
+#phGreyF:-ms-input-placeholder { color: #BDBDBD; }
 
-#phGrey:-moz-placeholder {
-  color: #757575;
-}
-
-#phGrey::-moz-placeholder {
-  color: #757575;
-}
-
-#phGrey:-ms-input-placeholder {
-  color: #757575;
-}
-
-#phGreyF::-webkit-input-placeholder {
-  color: #BDBDBD;
-}
-
-#phGreyF:-moz-placeholder {
-  color: #BDBDBD;
-}
-
-#phGreyF::-moz-placeholder {
-  color: #BDBDBD;
-}
-
-#phGreyF:-ms-input-placeholder {
-  color: #BDBDBD;
-}
-
+/* Animacion de transiciones responsive */
 .animate-hide {
-  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
   opacity: 1;
+  position: absolute;
 }
 
 .animate-hide.ng-hide {
   opacity: 0;
-  position: absolute;
-  bottom: 1000px;  
+  transition-delay: 0.2s;
+  left: 400px;  
 }
 
-.animate-hide-search-a {
-  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
-  opacity: 1;
-  right: 1000px;
+.animate-hide.ng-hide-remove {
+  transition: all linear 0.4s;
+  transition-delay: 0.4s;  
 }
 
-.animate-hide-search-a.ng-hide {
-  opacity: 0;
-  position: absolute;
-  right: 0px;
+.animate-hide.ng-hide-add {
+  transition: all linear 0.4s;
 }
 
-.animate-hide-search-b {
-  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-  opacity: 1;
-  right: 0px;
+/* Seccion de registro de compras */
+.registroCompras {
+  margin-top: -20px;
+  left: -240px;
 }
 
-.animate-hide-search-b.ng-hide {
-  opacity: 0;
-  position: absolute;
-  right: 1000px;
+/* Seccion de historial de compras */
+.historialCompras {
+  margin-top: -20px;
+  left: -120px;
 }
 
+/* Botoes de registro de compras e historial de comprs */
+.buttonsRH {
+  margin-top: 65px;
+  left: 310px;
+}
+
+/* Boton Registrar compra */
+.buttonRC {
+  left: 702px;
+  min-height: 52px;
+  margin-top: 12px;
+}
+
+/* Botones de modificacion y eliminacion de compras */
+.buttonsMD {
+  min-height: 52px;
+  margin-top: 10px;
+  left: 560px;
+}
+
+/* Boton de escape de registros y modificaciones */
 .xButton {
   margin-right: -22px;
   margin-top: -20px;
 }
 
+/* Tablas de socios registrados y compras en tienda */
+.tablasRH {
+  overflow: inherit;
+  margin-top: 50px;
+  left: 0px;
+}
+
+/* Tabla de tiendas registradas */
+.tablaTiendas {
+  overflow: inherit;
+  margin-top: 50px;
+  left: 280px;
+}
+
+/* Registro de compras */
+.regCompra {
+  width: 280px;
+  margin-top: 22px;
+  left: 306px;
+}
+
+/* Registro de socios */
+.regSocios {
+  margin-top: 114px;
+  left: 158px;
+}
+
+/* Registro de tiendas */
+.regTiendas {
+  margin-top: 114px;
+  left: 140px;
+}
+
+/* Seccion de modificaciones de tienda */
+.modTienda {
+  margin-top: 75px;
+  left: 150px;
+}
+
+.modTarjeta {
+  margin-top: 75px;
+  left: 156px;
+}
+
+/* Modificaciones de compras */
+.modCompra {
+  width: 406px;
+  margin-top: 22px;
+  left: 120px;
+}
+
+/* Buscador */
 input#autoComplete {
   background-image: url(https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-16.png);
   background-position: 10px center;
@@ -167,6 +194,7 @@ input#autoComplete {
   transition: all 0.2s;
   z-index: 0;
 }
+
 input#autoComplete:focus {
   background-position: -20px center;
   text-indent: 0;

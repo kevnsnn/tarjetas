@@ -1,4 +1,4 @@
-/* Clase del controlador del componente tarjetas */
+/* Clase del controlador del componente home */
 class homeController {
 
   /* ngIngect */

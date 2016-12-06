@@ -1,7 +1,12 @@
-<div class="homeContent" layout="column" layout-fill>
-  <md-toolbar class="topToolbar" md-scroll-shrink>
+<!-- Home -->
+<div layout="column" layout-fill>
+
+  <!-- Header toolbar -->
+  <md-toolbar style="max-height: 25px; min-height: 25px" md-scroll-shrink>
+    <!-- Mensaje de saludo -->
     <div class="md-toolbar-tools" layout="row" layout-align="space-between">
       <span class="md-subhead">¡Bienvenido a TARJETA!</span>
+      <!-- Informacion de contacto empresa -->
       <div>
         <md-icon class="material-icons md-16 iconAlign">phone</md-icon>
         <span class="md-subhead resalto">Teléfono de contacto: </span>
@@ -14,63 +19,21 @@
       </div>
     </div>
   </md-toolbar>
+  
+  <!-- Top toolbar -->
   <md-content>
     <section>
-    <md-subheader class="subhead">
-        <div layout="row" layout-align="space-around end">
-          <div layout="row" layout-align="space-around end">
+      <md-subheader class="subhead">
+        <!-- Top toolbar: icono y nombre de empresa -->      
+        <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
+          <div layout="row" layout-align="space-around center">
             <img ng-src="{{ $ctrl.icon }}" class="icon"/>
             <span class="title"><b>TARJETA</b></span>
           </div>
-          <md-nav-bar md-selected-nav-item="currentNavItem">
-            <md-nav-item md-nav-click="goto('page1')" name="page1">Premios</md-nav-item>
-            <md-nav-item md-nav-sref="app.page2" name="page2">Tiendas</md-nav-item>
-          </md-nav-bar>
-          <md-button class="md-raised md-warn" id="acceder" href="/accesos">Acceder</md-button>
+          <!-- Top toolbar: boton que direcciona a ruta de accesos y registros -->      
+          <md-button style="margin-top: 0px" class="md-raised md-warn" id="acceder" href="/accesos">Acceder</md-button>
         </div>
-    </md-subheader>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
-      <p>as</p>
+      </md-subheader>
     </section>
   </md-content>    
 </div>

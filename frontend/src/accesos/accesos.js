@@ -12,20 +12,20 @@ class AccesosController {
     this.$mdDialog = $mdDialog;
     this.$document = $document;
     this.icon = './images/icon.png';
-    this.isRegistro = false;
     this.isSocio = false;
     this.isTienda = false;
   }
 
-  /* Funcion que se encarga de realizar el post de tarjetas */
-  registrarTarjeta() {
-    /* Ejecucion de post */
+  /* Funcion que registra un nuevo socio */
+  postTarjeta() {
+    /* Ejecucion de post con datos de formulario de socios */
     this.$http.post('http://localhost:8000/api/tarjetas', {nombre: this.nombre, primerApellido: this.primerApellido,
       segundoApellido: this.segundoApellido, direccion: this.direccion, telefono: this.telefono, email: this.email,
       password: this.passwordS})
       .then(res => {
         /* Caso de exito */
         this.$log.debug('Respuesta del backend', res);
+        /* Dialogo de alerta registro de socio correcto */
         this.$mdDialog.show(
           this.$mdDialog.alert()
             .parent(angular.element(this.$document.body))
@@ -34,6 +34,8 @@ class AccesosController {
             .textContent('¡Se ha registrado correctamente!')
             .ok('Listo')
         );
+
+        /* Reseteo de inputs de formulario de socios */
         this.nombre = '';
         this.primerApellido = '';
         this.segundoApellido = '';
@@ -45,7 +47,8 @@ class AccesosController {
       })
       .catch(reason => {
         /* Caso de fallo */
-        this.$log.debug('Fallo del backend', reason);
+        this.$log.debug('Fallo registrando tarjeta del backend', reason);
+        /* Dialogo de alerta registro de socio incorrecto */
         this.$mdDialog.show(
           this.$mdDialog.alert()
             .parent(angular.element(this.$document.body))
@@ -56,15 +59,15 @@ class AccesosController {
         );
       });
   }
-
-  /* Funcion que se encarga de realizar el post de tarjetas */
-  registrarTienda() {
-    /* Ejecucion de post */
+  /* Funcion que registra una nueva tienda */
+  postTienda() {
+    /* Ejecucion de post con datos de formulario de tiendas */
     this.$http.post('http://localhost:8000/api/tiendas', {nombreTienda: this.nombreTienda, direccion: this.direccionTienda,
       telefono: this.telefonoTienda, password: this.passwordT})
       .then(res => {
         /* Caso de exito */
         this.$log.debug('Respuesta del backend', res);
+        /* Dialogo de alerta registro de tienda correcto */
         this.$mdDialog.show(
           this.$mdDialog.alert()
             .parent(angular.element(this.$document.body))
@@ -73,6 +76,8 @@ class AccesosController {
             .textContent('¡Se ha registrado correctamente!')
             .ok('Listo')
         );
+
+        /* Reseteo de inputs de formulario de tiendas */
         this.nombreTienda = '';
         this.direccionTienda = '';
         this.telefonoTienda = '';
@@ -82,6 +87,7 @@ class AccesosController {
       .catch(reason => {
         /* Caso de fallo */
         this.$log.debug('Fallo del backend', reason);
+        /* Dialogo de alerta registro de socio incorrecto */
         this.$mdDialog.show(
           this.$mdDialog.alert()
             .parent(angular.element(this.$document.body))
@@ -93,28 +99,41 @@ class AccesosController {
       });
   }
 
+  /* Funcio que da accesos a usuarios */
   loginUser() {
-    this.$log.debug('Logueando');
+    /* Peticion de token a partir de credenciales tipo socio del formulario de acceso */
     this.$auth.login({email: this.usuario, password: this.password})
      .then(res => {
-       this.$auth.setToken(res.data);
-       localStorage.setItem('user', this.usuario);
-       localStorage.setItem('type', 'socio');
-       this.$state.go('socios');
+       /* Caso de exito usuario tipo socio */
+       this.$auth.setToken(res.data);               /* Almacenar token de sesion */
+       localStorage.setItem('user', this.usuario);  /* Almacenar nombre de usuario */
+       localStorage.setItem('type', 'socio');       /* Almacenar tipo de usuario */
+       this.$state.go('socios');                    /* Redireccionaa socios */
      })
      .catch(() => {
+       /* Peticion de token a partir de credenciales tipo tienda del formulario de acceso */
        this.$auth.login({nombreTienda: this.usuario, password: this.password})
         .then(res => {
-          this.$auth.setToken(res.data);
-          localStorage.setItem('user', this.usuario);
-          localStorage.setItem('type', 'tienda');
-          this.$state.go('tiendas');
+          /* Caso de exito usuario tipo tienda */
+          this.$auth.setToken(res.data);              /* Almacenar token de sesion */
+          localStorage.setItem('user', this.usuario); /* Almacenar nombre de usuario */
+          localStorage.setItem('type', 'tienda');     /* Almacenar tipo de usuario */
+          this.$state.go('tiendas');                  /* Redireccionaa tiendas */
         })
         .catch(reason => {
-          this.$log.debug('Login: Fail login user from backend', reason);
-          this.$window.alert("Incorrect username or password");
-          this.usuario = '';
-          this.password = '';
+          /* Caso de fallo */
+          this.$log.debug('Fallo logueando del backend', reason);
+          /* Dialogo de alerta modificaciones de compra incorrectas */
+          this.$mdDialog.show(
+            this.$mdDialog.alert()
+              .parent(angular.element(this.$document.body))
+              .clickOutsideToClose(true)
+              .title('Credenciales erróneas')
+              .textContent('¡Usuario o contraseña inválidos!')
+              .ok('Corregir')
+          );
+
+          this.password = ''; /* Reseteo de input contraseña */
         });
      });
   }

@@ -1,17 +1,22 @@
-<!-- Accesos -->
-<div class="homeContent" layout="column" layout-fill layout-align="start center">
+<!-- Socios -->
+<div layout="column" layout-fill layout-align="start center">
+
+  <!-- Top toolbar -->
   <md-toolbar md-scroll-shrink>
     <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
+      <!-- Top toolbar: cono y nombre de empresa -->      
       <div layout="row" layout-align="space-around center">
         <img ng-src="{{ $ctrl.icon }}" class="icon"/>
         <span class="title"><b>TARJETA</b></span>
       </div>
+      <!-- Top toolbar: mensaje informativo de pagina -->
       <div layout="row" layout-align="start">
-        <span style="margin-top: 10px" class="subtitle"><sup><em>¡Gestiona tus premios!</em></sup></span>
+        <span style="margin-top: 4px" class="subtitle"><sup><em>¡Gestiona tus premios!</em></sup></span>
       </div>
       <div layout="row">
+        <!-- Top toolbar: nombre y puntos acumulados de usuario -->
         <span style="margin-top: 10px" class="subtitle"><sup>Socio: {{ $ctrl.user }} | Puntos: {{$ctrl.puntos }}</sup></span>
-        <!-- Fab Speed dial -->
+        <!-- Top toolbar: fab speed dial direccion izquierda -->
         <div style="margin-top: 14px">
           <md-fab-speed-dial class="md-scale" md-direction="left">
             <md-fab-trigger>
@@ -19,16 +24,13 @@
                 <md-icon class="material-icons" md-colors="{color: 'primary-50'}">more_vert</md-icon>
               </md-button>
             </md-fab-trigger>
-            <!-- Actions fab speed dial-->
+            <!-- Top toolbar: acciones fab speed dial de deslogueo y modificacion de cuenta/gestion -->
             <md-fab-actions>
               <md-button class="md-fab md-mini md-warn md-hue-3" ng-click="$ctrl.exit()">
                 <md-icon class="material-icons" md-colors="{color: 'primary-50'}">exit_to_app</md-icon>
               </md-button>
-              <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="!$ctrl.isSettings" ng-click="$ctrl.isSettings = true">
-                <md-icon class="material-icons" md-colors="{color: 'primary-50'}">settings</md-icon>
-              </md-button>
-              <md-button class="md-fab md-mini md-warn md-hue-1" ng-show="$ctrl.isSettings" ng-click="$ctrl.isSettings = false">
-                <md-icon class="material-icons" md-colors="{color: 'primary-50'}">shop</md-icon>
+              <md-button class="md-fab md-mini md-warn md-hue-1" ng-click="$ctrl.isSettings = !$ctrl.isSettings">
+                <md-icon class="material-icons" md-colors="{color: 'primary-50'}">{{ $ctrl.isSettings ? 'home' : 'settings' }}</md-icon>
               </md-button>
             </md-fab-actions>
           </md-fab-speed-dial>
@@ -36,8 +38,12 @@
       </div>
     </div>
   </md-toolbar>
-  <div class="animate-hide" layout="column" layout-align="center" ng-hide="$ctrl.isSettings">
+
+  <!-- Seccion de tabla de contenido de tiendas registradas -->
+  <div class="tablaTiendas animate-hide" layout="column" layout-align="center" ng-hide="$ctrl.isSettings">
+    <!-- Tiendas registradas: titulo informativo -->
     <h2 style="color: teal">Tiendas con las que puede sumar puntos</h2>
+    <!-- Tiendas registradas: tabla -->
     <md-table-container style="overflow: inherit">
       <table id="findTiendasResult" md-table ng-model="$ctrl.selected">
         <thead md-head md-order="nombreTienda">
@@ -57,9 +63,14 @@
         </tbody>
       </table>
     </md-table-container>
-    <md-table-pagination md-limit="$ctrl.query.limit" md-page="$ctrl.query.page" md-total="{{$ctrl.filterTiendas.length}}" md-page-select></md-table-pagination>    
+    <!-- Tiendas registradas: pie de tabla -->
+    <md-table-pagination md-limit="$ctrl.query.limit" md-page="$ctrl.query.page" md-total="{{$ctrl.filterTiendas.length}}"
+    md-page-select></md-table-pagination>    
     </div>
-  <div layout="column" style="margin-top: 10px" class="box formTarjeta animate-hide" ng-hide="!$ctrl.isSettings" layout-align="center">
+
+  <!-- Seccion de modificacion de datos de socio logueado y eliminacion de cuenta -->
+  <div layout="column" class="box modTarjeta animate-hide" ng-hide="!$ctrl.isSettings" layout-align="center">
+    <!-- Modificacion y eliminacion de socio: titulo de seccion y boton de escape -->
     <div layout="row" layout-align="space-between">    
       <h2 class="registroTitle">Modifica tus datos</h2>
       <div class="xButton">
@@ -68,69 +79,61 @@
         </md-button>
       </div>
     </div>
-    <!-- Formulario tarjetas -->
+    <!-- Modificacion y eliminacion de socio: formulario de datos de socio -->
     <form name="socioForm" ng-submit="socioForm.$valid && $ctrl.modifyTarjeta()">
-    <!-- Formulario tarjetas -->
-    <div layout="row">
-      <!-- Input nombre -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">person</md-icon>        
-        <input ng-disabled="true" style="color: white" ng-model="$ctrl.nombre" name="nombre" type="text" placeholder="Nombre" id="phGrey">
-      </md-input-container>
-      <!-- Input primerApellido -->
-      <md-input-container md-no-float class="md-block">
-        <input ng-disabled="true" style="color: white" ng-model="$ctrl.primerApellido" name="primerApellido" type="text" placeholder="Primer apellido" id="phGrey">
-      </md-input-container>
-      <!-- Input segundoApellido -->
-      <md-input-container md-no-float class="md-block">
-        <input ng-disabled="true" style="color: white" ng-model="$ctrl.segundoApellido" name="segundoApellido" type="text" placeholder="Segundo apellido" id="phGrey">
-      </md-input-container>
-    </div>
-    <div layout="row">
-      <!-- Input direccion -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">home</md-icon>
-        <input style="color: white" ng-model="$ctrl.direccion" name="direccion" type="text" placeholder="Dirección" id="phGrey">
-      </md-input-container>                
-      <!-- Input telefono -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">phone</md-icon>        
-        <input style="color: white" ng-model="$ctrl.telefono" name="telefono" type="text" placeholder="Teléfono" id="phGrey">
-      </md-input-container>
-       <!-- Input email -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">email</md-icon>        
-        <input ng-disabled="true" style="color: white" ng-model="$ctrl.email" name="email" type="email" placeholder="Email" id="phGrey">
-      </md-input-container>
-    </div>
-    <div layout="row">      
-      <!-- Password -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">lock</md-icon>
-        <input ng-maxlength="30" ng-minlength="6" type="password" placeholder="Contraseña"
-        ng-model="$ctrl.password" name="password" id="phGrey" ng-pattern="/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/">
-        <!-- Password error messages -->
-        <div ng-messages="socioForm.password.$error">
-          <div ng-message="pattern">Requiere contraseña alfanumérica</div>
-          <div ng-message="maxlength">Máxima longitud de 30 caracteres</div>
-          <div ng-message="minlength">Mínima longitud de 6 caracteres</div>
-        </div>
-      </md-input-container>
-      <!-- Confirm Password -->
-      <md-input-container md-no-float class="md-block">
-        <md-icon class="material-icons md-light">security</md-icon>
-        <input match-password="password" type="password" placeholder="Confirme contraseña"
-        ng-model="$ctrl.confirmPassword" name="confirmPassword" id="phGrey">
-        <!-- Confirm password error messages -->
-        <div ng-messages="socioForm.confirmPassword.$error">
-          <div ng-message="passwordMatch">La contraseña no es la misma</div>
-        </div>
-      </md-input-container>
-    </div>
-      <!-- Boton submit del formulario -->
+      <!-- Modificacion y eliminacion de socio: inputs de formulario de datos de socio -->
+      <div layout="row">
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">person</md-icon>        
+          <input ng-disabled="true" style="color: white" ng-model="$ctrl.nombre" name="nombre" type="text" placeholder="Nombre"id="phGrey">
+        </md-input-container>
+        <md-input-container md-no-float class="md-block">
+          <input ng-disabled="true" style="color: white" ng-model="$ctrl.primerApellido" name="primerApellido" type="text"
+          placeholder="Primer apellido" id="phGrey">
+        </md-input-container>
+        <md-input-container md-no-float class="md-block">
+          <input ng-disabled="true" style="color: white" ng-model="$ctrl.segundoApellido" name="segundoApellido" type="text"
+          placeholder="Segundo apellido" id="phGrey">
+        </md-input-container>
+      </div>
+      <div layout="row">
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">home</md-icon>
+          <input style="color: white" ng-model="$ctrl.direccion" name="direccion" type="text" placeholder="Dirección" id="phGrey">
+        </md-input-container>                
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">phone</md-icon>        
+          <input style="color: white" ng-model="$ctrl.telefono" name="telefono" type="text" placeholder="Teléfono" id="phGrey">
+        </md-input-container>
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">email</md-icon>        
+          <input ng-disabled="true" style="color: white" ng-model="$ctrl.email" name="email" type="email" placeholder="Email" id="phGrey">
+        </md-input-container>
+      </div>
+      <div layout="row">      
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">lock</md-icon>
+          <input ng-maxlength="30" ng-minlength="6" type="password" placeholder="Contraseña"
+          ng-model="$ctrl.password" name="password" id="phGrey" ng-pattern="/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/">
+          <div ng-messages="socioForm.password.$error">
+            <div ng-message="pattern">Requiere contraseña alfanumérica</div>
+            <div ng-message="maxlength">Máxima longitud de 30 caracteres</div>
+            <div ng-message="minlength">Mínima longitud de 6 caracteres</div>
+          </div>
+        </md-input-container>
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="material-icons md-light">security</md-icon>
+          <input match-password="password" type="password" placeholder="Confirme contraseña"
+          ng-model="$ctrl.confirmPassword" name="confirmPassword" id="phGrey">
+          <div ng-messages="socioForm.confirmPassword.$error">
+            <div ng-message="passwordMatch">La contraseña no es la misma</div>
+          </div>
+        </md-input-container>
+      </div>
+      <!-- Modificacion y eliminacion de socio: boton para realizar modificaciones de socio -->      
       <md-button type="submit" id="modTarjeta" class="md-raised md-warn">Modificar</md-button>
+      <!-- Modificacion y eliminacion de socio: boton para eliminacion de cuenta -->
       <md-button type="button" id="elimTarjeta" ng-click="$ctrl.deleteCuenta($event)" class="md-warn">Eliminar Cuenta</md-button>      
     </form>
   </div>
-  
 </div>
