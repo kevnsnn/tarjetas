@@ -39,7 +39,7 @@ gulp.task('pre-test', function () {
 });
 
 gulp.task('test', ['default', 'set-testing-env', 'pre-test'], function () {
-  return  gulp.src(['dist/pu/**/*.test.js'])
+  return  gulp.src(['dist/PU/**/*.test.js'])
     .pipe(mocha({ reporter: 'nyan' }))
     // Creating the reports after tests ran
     .pipe(istanbul.writeReports())

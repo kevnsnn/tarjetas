@@ -22,7 +22,7 @@ function login(req, res, next) {
         let token = jwt.encode(payload, config.secret, 'HS256');
         res.status(200).json(token); /* Status: Logueo correcta + codigo: 200 + token */
         } else {
-          res.status(401).json({msg: 'Fail credentials'}); /* Caso de fallo: credenciales erroneas */
+          res.status(401).json({msg: 'Credenciales erroneas'}); /* Caso de fallo: credenciales erroneas */
         }  
       })
       .catch(reason => {
@@ -44,7 +44,7 @@ function login(req, res, next) {
         let token = jwt.encode(payload, config.secret, 'HS256');
         res.status(200).json(token); /* Status: Logueo correcta + codigo: 200 + token */
         } else {
-          res.status(401).json({msg: 'Fail credentials'}); /* Caso de fallo: credenciales erroneas */
+          res.status(401).json({msg: 'Credenciales erroneas'}); /* Caso de fallo: credenciales erroneas */
         }  
       })
       .catch(reason => {
